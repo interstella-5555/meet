@@ -113,35 +113,43 @@ export const profilesRouter = router({
     .query(async ({ ctx, input }) => {
       const { latitude, longitude, radiusMeters, limit } = input;
 
-      // Get blocked user IDs
-      const blockedUsers = await db
-        .select({ blockedId: blocks.blockedId })
-        .from(blocks)
-        .where(eq(blocks.blockerId, ctx.userId));
+      // Calculate bounding box for initial filter (uses index!)
+      // ~111km per degree latitude, longitude varies by latitude
+      const latDelta = radiusMeters / 111000;
+      const lonDelta = radiusMeters / (111000 * Math.cos((latitude * Math.PI) / 180));
 
-      const blockedIds = blockedUsers.map((b) => b.blockedId);
+      const minLat = latitude - latDelta;
+      const maxLat = latitude + latDelta;
+      const minLon = longitude - lonDelta;
+      const maxLon = longitude + lonDelta;
 
-      // Get users who blocked current user
-      const blockedByUsers = await db
-        .select({ blockerId: blocks.blockerId })
-        .from(blocks)
-        .where(eq(blocks.blockedId, ctx.userId));
+      // Get blocked users and current profile in parallel
+      const [blockedUsers, blockedByUsers, currentProfileResult] = await Promise.all([
+        db.select({ blockedId: blocks.blockedId }).from(blocks).where(eq(blocks.blockerId, ctx.userId)),
+        db.select({ blockerId: blocks.blockerId }).from(blocks).where(eq(blocks.blockedId, ctx.userId)),
+        db.select().from(profiles).where(eq(profiles.userId, ctx.userId)),
+      ]);
 
-      const blockedByIds = blockedByUsers.map((b) => b.blockerId);
+      const allBlockedIds = new Set([
+        ...blockedUsers.map((b) => b.blockedId),
+        ...blockedByUsers.map((b) => b.blockerId),
+      ]);
 
-      const allBlockedIds = [...new Set([...blockedIds, ...blockedByIds])];
+      const currentProfile = currentProfileResult[0];
 
-      // Calculate distance using Haversine formula in SQL
-      // This is a simplified version - in production use PostGIS
+      // Query with bounding box filter first (fast, uses index)
+      // Then calculate exact Haversine distance
       const distanceFormula = sql<number>`
         6371000 * acos(
-          cos(radians(${latitude})) * cos(radians(${profiles.latitude})) *
-          cos(radians(${profiles.longitude}) - radians(${longitude})) +
-          sin(radians(${latitude})) * sin(radians(${profiles.latitude}))
+          LEAST(1.0, GREATEST(-1.0,
+            cos(radians(${latitude})) * cos(radians(${profiles.latitude})) *
+            cos(radians(${profiles.longitude}) - radians(${longitude})) +
+            sin(radians(${latitude})) * sin(radians(${profiles.latitude}))
+          ))
         )
       `;
 
-      let query = db
+      const nearbyUsers = await db
         .select({
           profile: profiles,
           distance: distanceFormula,
@@ -150,44 +158,35 @@ export const profilesRouter = router({
         .where(
           and(
             ne(profiles.userId, ctx.userId),
-            sql`${profiles.latitude} IS NOT NULL`,
-            sql`${profiles.longitude} IS NOT NULL`,
+            // Bounding box filter (uses index)
+            sql`${profiles.latitude} BETWEEN ${minLat} AND ${maxLat}`,
+            sql`${profiles.longitude} BETWEEN ${minLon} AND ${maxLon}`,
+            // Exact distance filter
             sql`${distanceFormula} <= ${radiusMeters}`
           )
         )
         .orderBy(distanceFormula)
-        .limit(limit);
+        .limit(limit + allBlockedIds.size); // Fetch extra to account for filtered
 
-      const nearbyUsers = await query;
+      // Filter blocked and calculate similarity in one pass
+      const results = [];
+      for (const u of nearbyUsers) {
+        if (allBlockedIds.has(u.profile.userId)) continue;
+        if (results.length >= limit) break;
 
-      // Filter out blocked users
-      const filteredUsers = nearbyUsers.filter(
-        (u) => !allBlockedIds.includes(u.profile.userId)
-      );
-
-      // Get current user's embedding for similarity calculation
-      const [currentProfile] = await db
-        .select()
-        .from(profiles)
-        .where(eq(profiles.userId, ctx.userId));
-
-      // Calculate similarity scores if embeddings exist
-      return filteredUsers.map((u) => {
         let similarityScore: number | null = null;
-
         if (currentProfile?.embedding && u.profile.embedding) {
-          similarityScore = cosineSimilarity(
-            currentProfile.embedding,
-            u.profile.embedding
-          );
+          similarityScore = cosineSimilarity(currentProfile.embedding, u.profile.embedding);
         }
 
-        return {
+        results.push({
           profile: u.profile,
           distance: u.distance,
           similarityScore,
-        };
-      });
+        });
+      }
+
+      return results;
     }),
 
   // Get profile by user ID

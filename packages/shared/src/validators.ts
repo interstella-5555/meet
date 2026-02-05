@@ -21,7 +21,7 @@ export const updateLocationSchema = z.object({
 
 // Wave validators
 export const sendWaveSchema = z.object({
-  toUserId: z.string().uuid(),
+  toUserId: z.string().min(1),
   message: z.string().max(200).optional(),
 });
 
@@ -46,7 +46,7 @@ export const getNearbyUsersSchema = z.object({
 
 // Block validator
 export const blockUserSchema = z.object({
-  userId: z.string().uuid(),
+  userId: z.string().min(1),
 });
 
 // Type exports from schemas

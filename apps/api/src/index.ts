@@ -23,6 +23,23 @@ app.get('/health', (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Debug: Check recent verifications (dev only)
+if (process.env.NODE_ENV !== 'production' || process.env.ENABLE_DEV_LOGIN === 'true') {
+  app.get('/dev/verifications', async (c) => {
+    const { db } = await import('./db');
+    const { verification } = await import('./db/schema');
+    const { desc } = await import('drizzle-orm');
+
+    const verifications = await db
+      .select()
+      .from(verification)
+      .orderBy(desc(verification.createdAt))
+      .limit(5);
+
+    return c.json(verifications);
+  });
+}
+
 // Better Auth handler
 app.on(['POST', 'GET'], '/api/auth/*', (c) => {
   return auth.handler(c.req.raw);

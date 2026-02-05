@@ -14,9 +14,10 @@ export default function TabsLayout() {
     (state) => state.setHasCheckedProfile
   );
 
-  const { data: profileData, isLoading: isLoadingProfile } =
+  const { data: profileData, isLoading: isLoadingProfile, isError, refetch } =
     trpc.profiles.me.useQuery(undefined, {
       enabled: !!user && !hasCheckedProfile,
+      retry: 2, // Retry twice on failure
     });
 
   useEffect(() => {
@@ -27,6 +28,23 @@ export default function TabsLayout() {
       setHasCheckedProfile(true);
     }
   }, [profileData, hasCheckedProfile, setProfile, setHasCheckedProfile]);
+
+  // If API error, show retry button instead of redirecting to onboarding
+  if (isError && !hasCheckedProfile) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+        <Text style={{ fontSize: 16, color: '#666', marginBottom: 16, textAlign: 'center' }}>
+          Nie udało się połączyć z serwerem
+        </Text>
+        <Text
+          style={{ color: '#007AFF', fontSize: 16 }}
+          onPress={() => refetch()}
+        >
+          Spróbuj ponownie
+        </Text>
+      </View>
+    );
+  }
 
   if (isLoading || (user && !hasCheckedProfile && isLoadingProfile)) {
     return (

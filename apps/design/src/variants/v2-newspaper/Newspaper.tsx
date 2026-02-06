@@ -11,7 +11,7 @@ export const meta: VariantMeta = {
   features: [
     'Serif headings (Instrument Serif), cienkie rules, kolumnowy uklad',
     'Czerwony akcent na kremowym tle — notki prasowe zamiast kart',
-    'Tagi jako rubryki ogloszeniowe z symbolem §',
+    'Tagi jako rubryki ogloszeniowe z rozetka (bullet rose)',
   ],
   uxAnalysis: [
     'Powaznie i dorosle — odcina od dating-appow',
@@ -66,9 +66,9 @@ export default function Newspaper() {
                 <span className={s.dist}>~800m</span>
               </div>
               <div className={s.tags}>
-                <span className={`${s.tag} ${s.match}`}>pies</span>
-                <span className={`${s.tag} ${s.match}`}>kregle</span>
-                <span className={s.tag}>bieganie</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> pies</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> kregle</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> bieganie</span>
               </div>
             </div>
             <div className={s.waveBtn}>
@@ -85,8 +85,8 @@ export default function Newspaper() {
                 <span className={s.dist}>~1.2 km</span>
               </div>
               <div className={s.tags}>
-                <span className={`${s.tag} ${s.match}`}>bieganie</span>
-                <span className={s.tag}>kawa</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> bieganie</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> kawa</span>
               </div>
             </div>
             <div className={s.waveBtn}>
@@ -103,8 +103,8 @@ export default function Newspaper() {
                 <span className={s.dist}>~2.1 km</span>
               </div>
               <div className={s.tags}>
-                <span className={s.tag}>sci-fi</span>
-                <span className={s.tag}>gry</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> sci-fi</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> gry</span>
               </div>
             </div>
             <div className={s.waveBtn}>

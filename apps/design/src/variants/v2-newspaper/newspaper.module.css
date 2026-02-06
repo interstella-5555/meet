@@ -322,16 +322,25 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.tag::before {
-  content: '§ ';
+.tagIcon {
+  width: 10px;
+  height: 10px;
   color: var(--rule);
+  flex-shrink: 0;
 }
 
 .match {
   color: var(--accent);
   font-weight: 600;
+}
+
+.match .tagIcon {
+  color: var(--accent);
 }
 
 .waveBtn {

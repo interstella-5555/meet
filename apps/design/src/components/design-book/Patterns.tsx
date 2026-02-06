@@ -1,4 +1,5 @@
 import s from './patterns.module.css'
+import { Icon } from '~/components/Icons'
 
 export function Patterns() {
   return (
@@ -40,13 +41,13 @@ export function Patterns() {
         <h4 className={s.groupTitle}>Tag Prefix Pattern</h4>
         <div className={s.tagDemo}>
           <div className={s.tagRow}>
-            <span className={s.tag}><span className={s.tagPrefix}>&#167; </span>pies</span>
-            <span className={s.tag}><span className={s.tagPrefix}>&#167; </span>kregle</span>
-            <span className={s.tagMatch}><span className={s.tagPrefix}>&#167; </span>bieganie</span>
-            <span className={s.tag}><span className={s.tagPrefix}>&#167; </span>kawa</span>
+            <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> pies</span>
+            <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> kregle</span>
+            <span className={s.tagMatch}><Icon name="bullet-rose" className={s.tagMatchIcon} /> bieganie</span>
+            <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> kawa</span>
           </div>
           <p className={s.tagNote}>
-            The section mark &#167; prefixes interest tags, evoking editorial taxonomy.
+            The bullet rose (4-petal rosette) prefixes interest tags, evoking editorial ornamental tradition.
             Matched interests use accent red with bold weight.
           </p>
         </div>

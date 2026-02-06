@@ -22,6 +22,7 @@ const ICONS = [
   { name: 'arrow-left', label: 'Back' },
   { name: 'search', label: 'Search' },
   { name: 'heart', label: 'Heart' },
+  { name: 'bullet-rose', label: 'Tag Prefix' },
 ]
 
 const SIZES = [16, 24, 32] as const

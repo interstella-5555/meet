@@ -73,6 +73,12 @@ export function IconDefs() {
         <symbol id="icon-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
         </symbol>
+        <symbol id="icon-bullet-rose" viewBox="0 0 12 12">
+          <path d="M6 1.5C6 1.5 7.5 3.5 7.5 4.5C7.5 5.5 6.8 6 6 6C5.2 6 4.5 5.5 4.5 4.5C4.5 3.5 6 1.5 6 1.5Z" fill="currentColor" />
+          <path d="M6 10.5C6 10.5 7.5 8.5 7.5 7.5C7.5 6.5 6.8 6 6 6C5.2 6 4.5 6.5 4.5 7.5C4.5 8.5 6 10.5 6 10.5Z" fill="currentColor" />
+          <path d="M1.5 6C1.5 6 3.5 4.5 4.5 4.5C5.5 4.5 6 5.2 6 6C6 6.8 5.5 7.5 4.5 7.5C3.5 7.5 1.5 6 1.5 6Z" fill="currentColor" />
+          <path d="M10.5 6C10.5 6 8.5 4.5 7.5 4.5C6.5 4.5 6 5.2 6 6C6 6.8 6.5 7.5 7.5 7.5C8.5 7.5 10.5 6 10.5 6Z" fill="currentColor" />
+        </symbol>
       </defs>
     </svg>
   )

@@ -74,10 +74,16 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--db-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.tagPrefix {
+.tagIcon {
+  width: 10px;
+  height: 10px;
   color: var(--db-rule);
+  flex-shrink: 0;
 }
 
 .tagMatch {
@@ -87,6 +93,16 @@
   letter-spacing: 0.5px;
   color: var(--db-accent);
   font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tagMatchIcon {
+  width: 10px;
+  height: 10px;
+  color: var(--db-accent);
+  flex-shrink: 0;
 }
 
 .tagNote {

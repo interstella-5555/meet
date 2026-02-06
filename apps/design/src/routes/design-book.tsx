@@ -100,7 +100,7 @@ function DesignBookPage() {
             <h2 className={s.sectionTitle}>Decorative Patterns</h2>
           </div>
           <p className={s.sectionSubtitle}>
-            Rules, the section-mark tag system, map grid treatment,
+            Rules, the bullet-rose tag prefix, map grid treatment,
             and the editorial decorative vocabulary.
           </p>
           <Patterns />

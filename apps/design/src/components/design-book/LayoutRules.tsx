@@ -150,7 +150,7 @@ export function LayoutRules() {
               <li>Muted, desaturated status tones</li>
               <li>SVG stroke icons in editorial weight</li>
               <li>Grayscale-tinted avatars</li>
-              <li>&#167; section-mark prefix on tags</li>
+              <li>Bullet rose (rosette) prefix on tags</li>
               <li>Uppercase DM Sans labels</li>
               <li>Cream background, ink text</li>
             </ul>

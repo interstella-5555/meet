@@ -20,9 +20,9 @@ export function Components() {
                 <span className={s.dist}>~800m</span>
               </div>
               <div className={s.tags}>
-                <span className={`${s.tag} ${s.match}`}>&#167; pies</span>
-                <span className={`${s.tag} ${s.match}`}>&#167; kręgle</span>
-                <span className={s.tag}>&#167; bieganie</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> pies</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> kręgle</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> bieganie</span>
               </div>
             </div>
             <button className={s.waveBtn}>
@@ -42,8 +42,8 @@ export function Components() {
                 <span className={s.dist}>~1.2 km</span>
               </div>
               <div className={s.tags}>
-                <span className={`${s.tag} ${s.match}`}>&#167; bieganie</span>
-                <span className={s.tag}>&#167; kawa</span>
+                <span className={`${s.tag} ${s.match}`}><Icon name="bullet-rose" className={s.tagIcon} /> bieganie</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> kawa</span>
               </div>
             </div>
             <button className={`${s.waveBtn} ${s.waveBtnDone}`}>
@@ -63,8 +63,8 @@ export function Components() {
                 <span className={s.dist}>~2.1 km</span>
               </div>
               <div className={s.tags}>
-                <span className={s.tag}>&#167; sci-fi</span>
-                <span className={s.tag}>&#167; gry</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> sci-fi</span>
+                <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> gry</span>
               </div>
             </div>
             <button className={`${s.waveBtn} ${s.waveBtnLoading}`}>
@@ -200,7 +200,7 @@ export function Components() {
                   <div className={s.tags}>
                     {u.tags.map((t, ti) => (
                       <span key={t} className={`${s.tag} ${u.matches.includes(ti) ? s.match : ''}`}>
-                        &#167; {t}
+                        <Icon name="bullet-rose" className={s.tagIcon} /> {t}
                       </span>
                     ))}
                   </div>

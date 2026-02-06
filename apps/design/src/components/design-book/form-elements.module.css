@@ -355,11 +355,28 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--db-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tagIcon {
+  width: 10px;
+  height: 10px;
+  color: var(--db-rule);
+  flex-shrink: 0;
 }
 
 .tagMatch {
   color: var(--db-accent);
   font-weight: 600;
+}
+
+.tagMatchIcon {
+  width: 10px;
+  height: 10px;
+  color: var(--db-accent);
+  flex-shrink: 0;
 }
 
 .statusBadge {

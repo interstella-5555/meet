@@ -151,10 +151,10 @@ export function FormElements() {
           <div className={s.badgeItem}>
             <div className={s.badgeLabel}>Interest Tags</div>
             <div className={s.tagRow}>
-              <span className={s.tag}>&#167; pies</span>
-              <span className={`${s.tag} ${s.tagMatch}`}>&#167; kręgle</span>
-              <span className={s.tag}>&#167; bieganie</span>
-              <span className={`${s.tag} ${s.tagMatch}`}>&#167; kawa</span>
+              <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> pies</span>
+              <span className={`${s.tag} ${s.tagMatch}`}><Icon name="bullet-rose" className={s.tagMatchIcon} /> kręgle</span>
+              <span className={s.tag}><Icon name="bullet-rose" className={s.tagIcon} /> bieganie</span>
+              <span className={`${s.tag} ${s.tagMatch}`}><Icon name="bullet-rose" className={s.tagMatchIcon} /> kawa</span>
             </div>
             <p className={s.badgeNote}>Muted = no match, accent red + bold = match</p>
           </div>

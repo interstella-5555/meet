@@ -15,8 +15,13 @@ body {
 .nav {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 4px;
-  padding: 24px 0 16px;
+  height: var(--nav-h, 56px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #111;
 }
 .nav-link {
   padding: 8px 20px;

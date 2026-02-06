@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import s from './design-book.module.css'
 import { ColorPalette } from '~/components/design-book/ColorPalette'
@@ -25,6 +26,27 @@ const SECTIONS = [
 ]
 
 function DesignBookPage() {
+  const [activeId, setActiveId] = useState(SECTIONS[0].id)
+
+  useEffect(() => {
+    const els = SECTIONS.map((sec) => document.getElementById(sec.id)).filter(Boolean) as HTMLElement[]
+    if (!els.length) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id)
+          }
+        }
+      },
+      { rootMargin: '-100px 0px -60% 0px', threshold: 0 },
+    )
+
+    els.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className={s.page}>
       {/* Sidebar */}
@@ -33,7 +55,10 @@ function DesignBookPage() {
         <ul className={s.navList}>
           {SECTIONS.map((sec) => (
             <li key={sec.id} className={s.navItem}>
-              <a href={`#${sec.id}`} className={s.navLink}>
+              <a
+                href={`#${sec.id}`}
+                className={`${s.navLink} ${activeId === sec.id ? s.navLinkActive : ''}`}
+              >
                 <span className={s.navNumber}>{sec.num}</span>
                 {sec.title}
               </a>

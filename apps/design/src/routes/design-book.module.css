@@ -26,7 +26,7 @@
   background: var(--db-bg);
   color: var(--db-ink);
   font-family: 'DM Sans', sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ── Sidebar Navigation ─────────────────────── */
@@ -35,8 +35,8 @@
   width: 220px;
   flex-shrink: 0;
   position: sticky;
-  top: 0;
-  height: 100vh;
+  top: var(--nav-h, 56px);
+  height: calc(100vh - var(--nav-h, 56px));
   overflow-y: auto;
   border-right: 1px solid var(--db-rule);
   padding: 32px 0;
@@ -87,9 +87,14 @@
   border-left-color: var(--db-accent);
 }
 
+.navLinkActive {
+  color: var(--db-ink);
+  border-left-color: var(--db-accent);
+}
+
 .navNumber {
   display: inline-block;
-  width: 20px;
+  width: 32px;
   font-family: 'Instrument Serif', serif;
   font-size: 13px;
   color: var(--db-rule);
@@ -138,7 +143,7 @@
 
 .section {
   margin-bottom: 72px;
-  scroll-margin-top: 32px;
+  scroll-margin-top: calc(var(--nav-h, 56px) + 24px);
 }
 
 .sectionHeader {

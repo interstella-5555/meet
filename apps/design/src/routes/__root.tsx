@@ -34,7 +34,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <NavLink to="/design-book">Design Book</NavLink>
           <NavLink to="/proposals">Proposals</NavLink>
         </nav>
-        <Outlet />
         {children}
         <Scripts />
       </body>

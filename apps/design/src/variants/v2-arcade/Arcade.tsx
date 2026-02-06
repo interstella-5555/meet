@@ -8,7 +8,7 @@ export default function Arcade() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.headerBar}>
-        <h1>Meet</h1>
+        <h1>Blisko</h1>
         <div className={s.xpBadge}>LVL 7 · 1240 XP</div>
       </div>
       <div className={s.mapArea}>

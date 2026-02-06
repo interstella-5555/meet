@@ -8,7 +8,7 @@ export default function HauteCouture() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.headerBar}>
-        <h1>Meet</h1>
+        <h1>Blisko</h1>
       </div>
       <div className={s.mapArea}>
         <div className={s.mapLines}></div>

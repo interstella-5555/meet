@@ -37,7 +37,7 @@ function LoginScreen() {
         <StatusBar />
         <div className={s.loginBody}>
           <div className={s.loginMasthead}>
-            <h1 className={s.loginTitle}>MEET</h1>
+            <h1 className={s.loginTitle}>BLISKO</h1>
             <div className={s.loginEdition}>Wyd. poranne &middot; Twoja okolica</div>
           </div>
           <div className={s.loginForm}>

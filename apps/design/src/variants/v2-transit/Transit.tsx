@@ -8,7 +8,7 @@ export default function Transit() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.headerBar}>
-        <h1>Meet</h1>
+        <h1>Blisko</h1>
         <div className="lineLegend">
           <div className="lineDot" style={{ background: '#E53935' }}></div>
           <div className="lineDot" style={{ background: '#1E88E5' }}></div>

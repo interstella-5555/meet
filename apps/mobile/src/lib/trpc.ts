@@ -33,7 +33,7 @@ export const trpcClient = trpc.createClient({
         }
 
         // Fallback to SecureStore (for dev auto-login)
-        const token = await SecureStore.getItemAsync('meet_session_token');
+        const token = await SecureStore.getItemAsync('blisko_session_token');
         return {
           authorization: token ? `Bearer ${token}` : '',
         };

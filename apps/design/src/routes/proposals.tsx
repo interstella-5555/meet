@@ -10,7 +10,7 @@ function ProposalsPage() {
   return (
     <div className="proposals-page">
       <div className="page-header">
-        <h1>Meet / Style Exploration</h1>
+        <h1>Blisko / Style Exploration</h1>
         <p>
           13 oryginalnych wariantow stylistycznych — kazdy z unikalna metafora
           wizualna i wlasnym UX patternem.

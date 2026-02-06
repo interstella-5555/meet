@@ -9,16 +9,17 @@ export interface ClusterUser {
 
 interface GridClusterMarkerProps {
   users: ClusterUser[];
+  highlighted?: boolean;
 }
 
-export function GridClusterMarker({ users }: GridClusterMarkerProps) {
+export function GridClusterMarker({ users, highlighted }: GridClusterMarkerProps) {
   const count = users.length;
 
   // Single user - show avatar
   if (count === 1) {
     const user = users[0];
     return (
-      <View style={styles.singleContainer}>
+      <View style={[styles.singleContainer, highlighted && styles.highlighted]}>
         {user.avatarUrl ? (
           <Image source={{ uri: user.avatarUrl }} style={styles.avatar} />
         ) : (
@@ -35,7 +36,7 @@ export function GridClusterMarker({ users }: GridClusterMarkerProps) {
   // 2-3 users - show stacked avatars
   if (count <= 3) {
     return (
-      <View style={styles.stackContainer}>
+      <View style={[styles.stackContainer, highlighted && styles.highlightedStack]}>
         {users.slice(0, 3).map((user, index) => (
           <View
             key={user.id}
@@ -61,7 +62,7 @@ export function GridClusterMarker({ users }: GridClusterMarkerProps) {
 
   // 4+ users - show count badge
   return (
-    <View style={styles.badgeContainer}>
+    <View style={[styles.badgeContainer, highlighted && styles.highlighted]}>
       <Text style={styles.badgeText}>{count}</Text>
     </View>
   );
@@ -152,5 +153,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  highlighted: {
+    borderWidth: 3,
+    borderColor: '#007AFF',
+  },
+  highlightedStack: {
+    backgroundColor: 'rgba(0, 122, 255, 0.1)',
+    borderRadius: 20,
+    padding: 4,
   },
 });

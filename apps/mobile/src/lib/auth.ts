@@ -9,8 +9,8 @@ export const authClient = createAuthClient({
   baseURL: API_URL,
   plugins: [
     expoClient({
-      scheme: 'meet',
-      storagePrefix: 'meet',
+      scheme: 'blisko',
+      storagePrefix: 'blisko',
       storage: SecureStore,
     }),
     emailOTPClient(),

@@ -8,7 +8,7 @@ import {
   conversationParticipants,
   profiles,
 } from '../../db/schema';
-import { sendMessageSchema } from '@meet/shared';
+import { sendMessageSchema } from '@repo/shared';
 import { TRPCError } from '@trpc/server';
 
 export const messagesRouter = router({

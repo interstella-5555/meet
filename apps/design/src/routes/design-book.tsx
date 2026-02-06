@@ -47,7 +47,7 @@ function DesignBookPage() {
         {/* Masthead */}
         <header className={s.masthead}>
           <h1 className={s.mastheadTitle}>
-            MEET <span className={s.mastheadDash}>&mdash;</span> Design Book
+            BLISKO <span className={s.mastheadDash}>&mdash;</span> Design Book
           </h1>
           <p className={s.mastheadEdition}>
             Newspaper / Editorial Variant &middot; Edition I &middot; February 2026

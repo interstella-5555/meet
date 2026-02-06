@@ -8,7 +8,7 @@ export default function Bauhaus() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.headerBar}>
-        <h1>Meet</h1>
+        <h1>Blisko</h1>
         <div className={s.legend}>
           <div className={s.legendBlock} style={{ background: '#E53935' }}></div>
           <div className={s.legendBlock} style={{ background: '#1565C0' }}></div>

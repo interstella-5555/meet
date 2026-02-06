@@ -8,7 +8,7 @@ export default function Dithered() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.menuBar}>
-        <span>Meet</span>
+        <span>Blisko</span>
         <span>Plik</span>
         <span>Widok</span>
         <span>Pomoc</span>

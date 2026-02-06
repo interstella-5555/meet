@@ -25,7 +25,7 @@ export default function Constellation() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.headerBar}>
-        <h1>Meet</h1>
+        <h1>Blisko</h1>
         <div className={s.coord}>52°13'N 21°00'E</div>
       </div>
       <div className={s.mapArea}>

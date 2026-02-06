@@ -3,13 +3,15 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useOnboardingStore } from '../../src/stores/onboardingStore';
+import { colors, type as typ, spacing, fonts } from '../../src/theme';
+import { Button } from '../../src/components/ui/Button';
+import { IconArrowLeft } from '../../src/components/ui/icons';
 
 export default function OnboardingBioScreen() {
   const { bio, setBio } = useOnboardingStore();
@@ -31,9 +33,12 @@ export default function OnboardingBioScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.content}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Text style={styles.backText}>Wstecz</Text>
-        </TouchableOpacity>
+        <Button
+          variant="ghost"
+          onPress={handleBack}
+        >
+          <IconArrowLeft size={20} color={colors.accent} />
+        </Button>
 
         <Text style={styles.step}>2 / 3</Text>
         <Text style={styles.title}>Opowiedz o sobie</Text>
@@ -47,6 +52,7 @@ export default function OnboardingBioScreen() {
           value={text}
           onChangeText={setText}
           placeholder="Napisz kilka slow o sobie..."
+          placeholderTextColor={colors.muted}
           multiline
           numberOfLines={5}
           textAlignVertical="top"
@@ -54,13 +60,12 @@ export default function OnboardingBioScreen() {
         />
         <Text style={styles.charCount}>{text.length} / 500</Text>
 
-        <TouchableOpacity
-          style={[styles.button, text.trim().length < 10 && styles.buttonDisabled]}
+        <Button
+          title="Dalej"
+          variant="accent"
           onPress={handleNext}
           disabled={text.trim().length < 10}
-        >
-          <Text style={styles.buttonText}>Dalej</Text>
-        </TouchableOpacity>
+        />
       </View>
     </KeyboardAvoidingView>
   );
@@ -69,63 +74,40 @@ export default function OnboardingBioScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bg,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.section,
     paddingTop: 60,
   },
-  backButton: {
-    marginBottom: 24,
-  },
-  backText: {
-    fontSize: 16,
-    color: '#007AFF',
-  },
   step: {
-    fontSize: 14,
-    color: '#999',
-    marginBottom: 8,
+    ...typ.caption,
+    marginBottom: spacing.tight,
+    marginTop: spacing.section,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 8,
+    ...typ.display,
+    marginBottom: spacing.tight,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
+    ...typ.body,
+    color: colors.muted,
+    marginBottom: spacing.block,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    padding: 16,
+    fontFamily: fonts.sans,
     fontSize: 16,
+    color: colors.ink,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.ink,
+    paddingVertical: 12,
     minHeight: 150,
-    marginBottom: 8,
+    marginBottom: spacing.tight,
   },
   charCount: {
-    fontSize: 12,
-    color: '#999',
+    ...typ.caption,
     textAlign: 'right',
-    marginBottom: 24,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    marginBottom: spacing.section,
   },
 });

@@ -7,7 +7,7 @@ const SERIF_SPECIMENS = [
     weight: '400',
     tracking: '2px',
     leading: '1.2',
-    sample: 'MEET',
+    sample: 'BLISKO',
     samplePl: '8 osób w pobliżu',
   },
   {

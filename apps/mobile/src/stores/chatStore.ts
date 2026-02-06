@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Message, Conversation } from '@meet/shared';
+import type { Message, Conversation } from '@repo/shared';
 
 interface ChatState {
   conversations: Conversation[];

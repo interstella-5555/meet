@@ -25,7 +25,7 @@ COPY --from=deps /app/apps/design/node_modules ./apps/design/node_modules
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY apps/design/ apps/design/
 
-RUN pnpm --filter @meet/design build
+RUN pnpm --filter @repo/design build
 
 # ── Stage 3: Production ─────────────────────
 FROM node:24-alpine AS runtime

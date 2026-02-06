@@ -1,4 +1,4 @@
-# Meet - Architektura Techniczna
+# Blisko - Architektura Techniczna
 
 ## Przegląd Stosu Technologicznego
 

@@ -1,33 +1,164 @@
-import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
-import { useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  Alert,
+} from 'react-native';
+import { useState, useCallback } from 'react';
+import { trpc } from '../../src/lib/trpc';
+import { WaveTabBar, WaveTab } from '../../src/components/waves/WaveTabBar';
+import { EmptyWavesState } from '../../src/components/waves/EmptyWavesState';
+import { WaveCard } from '../../src/components/waves/WaveCard';
+import { colors, spacing } from '../../src/theme';
+
+type WaveStatus = 'pending' | 'accepted' | 'declined';
 
 export default function WavesScreen() {
+  const [activeTab, setActiveTab] = useState<WaveTab>('received');
   const [refreshing, setRefreshing] = useState(false);
+  const [respondingTo, setRespondingTo] = useState<{
+    waveId: string;
+    action: 'accept' | 'decline';
+  } | null>(null);
 
-  const onRefresh = async () => {
+  const utils = trpc.useUtils();
+
+  const {
+    data: receivedWaves,
+    isLoading: isLoadingReceived,
+    refetch: refetchReceived,
+  } = trpc.waves.getReceived.useQuery();
+
+  const {
+    data: sentWaves,
+    isLoading: isLoadingSent,
+    refetch: refetchSent,
+  } = trpc.waves.getSent.useQuery();
+
+  const respondMutation = trpc.waves.respond.useMutation({
+    onSuccess: (data, variables) => {
+      utils.waves.getReceived.invalidate();
+      utils.waves.getSent.invalidate();
+
+      if (variables.accept) {
+        Alert.alert(
+          'Zaakceptowano!',
+          'Możecie teraz rozmawiać w zakładce Czaty',
+          [{ text: 'OK' }]
+        );
+      }
+    },
+    onError: (error) => {
+      Alert.alert('Błąd', error.message || 'Nie udało się odpowiedzieć na zaczepienie');
+    },
+    onSettled: () => {
+      setRespondingTo(null);
+    },
+  });
+
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    // TODO: Fetch received waves
-    setTimeout(() => setRefreshing(false), 1000);
+    await Promise.all([refetchReceived(), refetchSent()]);
+    setRefreshing(false);
+  }, [refetchReceived, refetchSent]);
+
+  const handleAccept = (waveId: string) => {
+    setRespondingTo({ waveId, action: 'accept' });
+    respondMutation.mutate({ waveId, accept: true });
   };
 
+  const handleDecline = (waveId: string) => {
+    Alert.alert(
+      'Odrzuć zaczepienie',
+      'Czy na pewno chcesz odrzucić to zaczepienie?',
+      [
+        { text: 'Anuluj', style: 'cancel' },
+        {
+          text: 'Odrzuć',
+          style: 'destructive',
+          onPress: () => {
+            setRespondingTo({ waveId, action: 'decline' });
+            respondMutation.mutate({ waveId, accept: false });
+          },
+        },
+      ]
+    );
+  };
+
+  const pendingReceivedCount = receivedWaves?.length ?? 0;
+  const pendingSentCount =
+    sentWaves?.filter((w) => w.wave.status === 'pending').length ?? 0;
+
+  const isLoading = activeTab === 'received' ? isLoadingReceived : isLoadingSent;
+
+  const renderReceivedList = () => (
+    <FlatList
+      data={receivedWaves || []}
+      keyExtractor={(item) => item.wave.id}
+      renderItem={({ item }) => (
+        <WaveCard
+          wave={{
+            ...item.wave,
+            status: item.wave.status as WaveStatus,
+          }}
+          profile={item.fromProfile}
+          type="received"
+          onAccept={() => handleAccept(item.wave.id)}
+          onDecline={() => handleDecline(item.wave.id)}
+          isAccepting={
+            respondingTo?.waveId === item.wave.id &&
+            respondingTo?.action === 'accept'
+          }
+          isDeclining={
+            respondingTo?.waveId === item.wave.id &&
+            respondingTo?.action === 'decline'
+          }
+        />
+      )}
+      contentContainerStyle={styles.list}
+      ListEmptyComponent={
+        !isLoading && !refreshing ? <EmptyWavesState type="received" /> : null
+      }
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.ink} />
+      }
+    />
+  );
+
+  const renderSentList = () => (
+    <FlatList
+      data={sentWaves || []}
+      keyExtractor={(item) => item.wave.id}
+      renderItem={({ item }) => (
+        <WaveCard
+          wave={{
+            ...item.wave,
+            status: item.wave.status as WaveStatus,
+          }}
+          profile={item.toProfile}
+          type="sent"
+        />
+      )}
+      contentContainerStyle={styles.list}
+      ListEmptyComponent={
+        !isLoading && !refreshing ? <EmptyWavesState type="sent" /> : null
+      }
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.ink} />
+      }
+    />
+  );
+
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={[]}
-        renderItem={() => null}
-        ListEmptyComponent={
-          <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>👋</Text>
-            <Text style={styles.emptyTitle}>Brak zaczepień</Text>
-            <Text style={styles.emptyText}>
-              Gdy ktoś Cię zaczepi, zobaczysz to tutaj
-            </Text>
-          </View>
-        }
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+    <View testID="waves-screen" style={styles.container}>
+      <WaveTabBar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        receivedCount={pendingReceivedCount}
+        sentCount={pendingSentCount}
       />
+      {activeTab === 'received' ? renderReceivedList() : renderSentList()}
     </View>
   );
 }
@@ -35,27 +166,10 @@ export default function WavesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bg,
   },
-  empty: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 100,
-    paddingHorizontal: 24,
-  },
-  emptyIcon: {
-    fontSize: 64,
-    marginBottom: 16,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
+  list: {
+    padding: spacing.column,
+    flexGrow: 1,
   },
 });

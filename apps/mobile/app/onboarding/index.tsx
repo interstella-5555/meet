@@ -2,14 +2,15 @@ import { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useOnboardingStore } from '../../src/stores/onboardingStore';
+import { colors, type as typ, spacing } from '../../src/theme';
+import { Input } from '../../src/components/ui/Input';
+import { Button } from '../../src/components/ui/Button';
 
 export default function OnboardingNameScreen() {
   const { displayName, setDisplayName } = useOnboardingStore();
@@ -33,9 +34,8 @@ export default function OnboardingNameScreen() {
           To imie bedzie widoczne dla innych uzytkownikow
         </Text>
 
-        <TextInput
+        <Input
           testID="name-input"
-          style={styles.input}
           value={name}
           onChangeText={setName}
           placeholder="Twoje imie"
@@ -44,13 +44,14 @@ export default function OnboardingNameScreen() {
           maxLength={30}
         />
 
-        <TouchableOpacity
-          style={[styles.button, name.trim().length < 2 && styles.buttonDisabled]}
-          onPress={handleNext}
-          disabled={name.trim().length < 2}
-        >
-          <Text style={styles.buttonText}>Dalej</Text>
-        </TouchableOpacity>
+        <View style={{ marginTop: spacing.section }}>
+          <Button
+            title="Dalej"
+            variant="accent"
+            onPress={handleNext}
+            disabled={name.trim().length < 2}
+          />
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -59,49 +60,24 @@ export default function OnboardingNameScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bg,
   },
   content: {
     flex: 1,
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.section,
     paddingTop: 100,
   },
   step: {
-    fontSize: 14,
-    color: '#999',
-    marginBottom: 8,
+    ...typ.caption,
+    marginBottom: spacing.tight,
   },
   title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#333',
-    marginBottom: 8,
+    ...typ.display,
+    marginBottom: spacing.tight,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 32,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 18,
-    marginBottom: 24,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    ...typ.body,
+    color: colors.muted,
+    marginBottom: spacing.block,
   },
 });

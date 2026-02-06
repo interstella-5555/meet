@@ -2,8 +2,6 @@ import { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -12,6 +10,9 @@ import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { authClient } from '../../src/lib/auth';
 import { useAuthStore } from '../../src/stores/authStore';
+import { colors, type as typ, spacing, fonts } from '../../src/theme';
+import { Input } from '../../src/components/ui/Input';
+import { Button } from '../../src/components/ui/Button';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000';
 
@@ -51,11 +52,11 @@ export default function LoginScreen() {
         // Save session to SecureStore so authClient.getSession() can read it
         // Better Auth expo client uses this format
         await SecureStore.setItemAsync(
-          'meet_session_token',
+          'blisko_session_token',
           data.session.token
         );
         await SecureStore.setItemAsync(
-          'meet_session_data',
+          'blisko_session_data',
           JSON.stringify({
             session: data.session,
             user: data.user,
@@ -110,16 +111,15 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.content}>
-        <Text style={styles.title}>Meet</Text>
+        <Text style={styles.title}>BLISKO</Text>
         <Text style={styles.subtitle}>
           Poznawaj ludzi o podobnych zainteresowaniach
         </Text>
 
         <View style={styles.form}>
-          <Text style={styles.label}>Email</Text>
-          <TextInput
+          <Input
             testID="email-input"
-            style={styles.input}
+            label="Email"
             placeholder="twoj@email.com"
             value={email}
             onChangeText={setEmail}
@@ -131,15 +131,16 @@ export default function LoginScreen() {
 
           {error && <Text style={styles.error}>{error}</Text>}
 
-          <TouchableOpacity
-            style={[styles.button, isLoading && styles.buttonDisabled]}
-            onPress={handleSendMagicLink}
-            disabled={isLoading}
-          >
-            <Text style={styles.buttonText}>
-              {isLoading ? 'Wysyłanie...' : 'Wyślij link'}
-            </Text>
-          </TouchableOpacity>
+          <View style={{ marginTop: spacing.column }}>
+            <Button
+              testID="send-link-button"
+              title={isLoading ? 'Wysyłanie...' : 'Wyślij link'}
+              variant="accent"
+              onPress={handleSendMagicLink}
+              disabled={isLoading}
+              loading={isLoading}
+            />
+          </View>
         </View>
       </View>
     </KeyboardAvoidingView>
@@ -149,57 +150,31 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bg,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.section,
   },
   title: {
-    fontSize: 48,
-    fontWeight: 'bold',
+    ...typ.display,
+    fontSize: 28,
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: spacing.tight,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#666',
+    ...typ.body,
+    color: colors.muted,
     textAlign: 'center',
-    marginBottom: 48,
+    marginBottom: spacing.block + spacing.column,
   },
   form: {
-    gap: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: {
-    backgroundColor: '#999',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    gap: spacing.column,
   },
   error: {
-    color: '#ff3b30',
+    fontFamily: fonts.sans,
+    color: colors.status.error.text,
     fontSize: 14,
   },
 });

@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "Meet",
-    "slug": "meet",
+    "name": "Blisko",
+    "slug": "blisko",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "meet",
+    "scheme": "blisko",
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -15,14 +15,14 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.meet.app",
+      "bundleIdentifier": "com.blisko.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Meet potrzebuje dostępu do lokalizacji, aby pokazać osoby w Twojej okolicy.",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Meet potrzebuje dostępu do lokalizacji, aby powiadamiać Cię o osobach w okolicy."
+        "NSLocationWhenInUseUsageDescription": "Blisko potrzebuje dostępu do lokalizacji, aby pokazać osoby w Twojej okolicy.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Blisko potrzebuje dostępu do lokalizacji, aby powiadamiać Cię o osobach w okolicy."
       }
     },
     "android": {
-      "package": "com.meet.app",
+      "package": "com.blisko.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -40,7 +40,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Meet potrzebuje dostępu do lokalizacji, aby powiadamiać Cię o osobach w okolicy."
+          "locationAlwaysAndWhenInUsePermission": "Blisko potrzebuje dostępu do lokalizacji, aby powiadamiać Cię o osobach w okolicy."
         }
       ],
       [

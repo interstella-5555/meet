@@ -1,6 +1,6 @@
 {
-  "name": "@meet/mobile",
-  "description": "Meet mobile app (Expo + React Native)",
+  "name": "@repo/mobile",
+  "description": "Blisko mobile app (Expo + React Native)",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -19,15 +19,16 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.4.17",
-    "@meet/shared": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/shared": "workspace:*",
     "@tanstack/react-query": "^5.50.0",
     "@trpc/client": "^11.0.0-rc.0",
     "@trpc/react-query": "^11.0.0-rc.0",
-    "@meet/api": "workspace:*",
     "better-auth": "^1.4.17",
     "expo": "~54.0.32",
     "expo-constants": "~18.0.13",
     "expo-dev-client": "^6.0.20",
+    "expo-font": "^14.0.11",
     "expo-linking": "~8.0.11",
     "expo-location": "~19.0.8",
     "expo-notifications": "~0.32.16",
@@ -39,6 +40,7 @@
     "react-native-maps": "^1.27.1",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
+    "react-native-svg": "^15.15.2",
     "zustand": "^5.0.0"
   },
   "devDependencies": {

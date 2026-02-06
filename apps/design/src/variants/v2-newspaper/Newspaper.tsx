@@ -25,7 +25,7 @@ export default function Newspaper() {
     <PhoneFrame className={s.phoneFrame}>
       <div className={s.statusBar}>09:41</div>
       <div className={s.masthead}>
-        <h1>MEET</h1>
+        <h1>BLISKO</h1>
         <div className={s.edition}>Wyd. poranne · 5 lut 2026 · Twoja okolica</div>
       </div>
       <div className={s.mapArea}>

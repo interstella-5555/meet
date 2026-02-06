@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
@@ -12,6 +11,9 @@ import { useLocalSearchParams, router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { authClient } from '../../src/lib/auth';
 import { useAuthStore } from '../../src/stores/authStore';
+import { colors, type as typ, spacing, fonts } from '../../src/theme';
+import { IconSend } from '../../src/components/ui/icons';
+import { Button } from '../../src/components/ui/Button';
 
 const CODE_LENGTH = 6;
 const RESEND_COOLDOWN = 10; // seconds between resends (10s for testing)
@@ -115,9 +117,9 @@ export default function VerifyScreen() {
         const { user, token } = result.data;
         const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
-        await SecureStore.setItemAsync('meet_session_token', token);
+        await SecureStore.setItemAsync('blisko_session_token', token);
         await SecureStore.setItemAsync(
-          'meet_session_data',
+          'blisko_session_data',
           JSON.stringify({ token, user, expiresAt: expiresAt.toISOString() })
         );
 
@@ -178,7 +180,9 @@ export default function VerifyScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.content}>
-        <Text style={styles.icon}>📧</Text>
+        <View style={styles.iconContainer}>
+          <IconSend size={32} color={colors.ink} />
+        </View>
         <Text style={styles.title}>Wpisz kod</Text>
         <Text style={styles.message}>
           Wysłaliśmy 6-cyfrowy kod na adres:
@@ -217,24 +221,20 @@ export default function VerifyScreen() {
           Sprawdź folder spam jeśli nie widzisz maila
         </Text>
 
-        <TouchableOpacity
-          style={[styles.resendButton, resendCooldown > 0 && styles.resendButtonDisabled]}
+        <Button
+          title={resendCooldown > 0
+            ? `Wyślij kod ponownie (${resendCooldown}s)`
+            : 'Wyślij kod ponownie'}
+          variant="ghost"
           onPress={handleResend}
           disabled={resendCooldown > 0 || isLoading}
-        >
-          <Text style={[styles.resendText, resendCooldown > 0 && styles.resendTextDisabled]}>
-            {resendCooldown > 0
-              ? `Wyślij kod ponownie (${resendCooldown}s)`
-              : 'Wyślij kod ponownie'}
-          </Text>
-        </TouchableOpacity>
+        />
 
-        <TouchableOpacity
-          style={styles.backButton}
+        <Button
+          title="Wróć"
+          variant="ghost"
           onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>Wróć</Text>
-        </TouchableOpacity>
+        />
       </View>
     </KeyboardAvoidingView>
   );
@@ -243,96 +243,72 @@ export default function VerifyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bg,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: spacing.section,
   },
-  icon: {
-    fontSize: 64,
-    marginBottom: 24,
+  iconContainer: {
+    marginBottom: spacing.section,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    ...typ.display,
+    marginBottom: spacing.column,
   },
   message: {
-    fontSize: 16,
-    color: '#666',
+    ...typ.body,
+    color: colors.muted,
     textAlign: 'center',
   },
   email: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#007AFF',
-    marginTop: 8,
-    marginBottom: 32,
+    ...typ.body,
+    fontFamily: fonts.sansMedium,
+    color: colors.accent,
+    marginTop: spacing.tight,
+    marginBottom: spacing.block,
   },
   codeContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 8,
-    marginBottom: 24,
+    marginBottom: spacing.section,
   },
   codeInput: {
     width: 48,
     height: 56,
-    borderWidth: 2,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    fontSize: 24,
-    fontWeight: 'bold',
+    borderWidth: 1,
+    borderColor: colors.ink,
+    fontFamily: fonts.serif,
+    fontSize: 20,
     textAlign: 'center',
-    backgroundColor: '#f9f9f9',
+    backgroundColor: 'transparent',
+    color: colors.ink,
   },
   codeInputFilled: {
-    borderColor: '#007AFF',
-    backgroundColor: '#fff',
+    borderColor: colors.accent,
   },
   codeInputError: {
-    borderColor: '#ff3b30',
+    borderColor: colors.status.error.text,
   },
   error: {
-    color: '#ff3b30',
+    fontFamily: fonts.sans,
+    color: colors.status.error.text,
     fontSize: 14,
-    marginBottom: 16,
+    marginBottom: spacing.column,
     textAlign: 'center',
   },
   loading: {
-    color: '#007AFF',
-    fontSize: 16,
-    marginBottom: 16,
+    ...typ.body,
+    color: colors.accent,
+    marginBottom: spacing.column,
   },
   hint: {
-    fontSize: 14,
-    color: '#999',
+    ...typ.caption,
     textAlign: 'center',
-    marginTop: 24,
-  },
-  resendButton: {
-    marginTop: 16,
-    padding: 12,
-  },
-  resendButtonDisabled: {
-    opacity: 0.5,
-  },
-  resendText: {
-    color: '#007AFF',
-    fontSize: 16,
-  },
-  resendTextDisabled: {
-    color: '#999',
-  },
-  backButton: {
-    marginTop: 8,
-    padding: 12,
-  },
-  backText: {
-    color: '#666',
-    fontSize: 16,
+    marginTop: spacing.section,
+    marginBottom: spacing.column,
   },
 });

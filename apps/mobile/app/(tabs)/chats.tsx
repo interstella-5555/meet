@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
 import { useState } from 'react';
+import { colors, type as typ, spacing } from '../../src/theme';
+import { IconChat } from '../../src/components/ui/icons';
 
 export default function ChatsScreen() {
   const [refreshing, setRefreshing] = useState(false);
@@ -17,7 +19,7 @@ export default function ChatsScreen() {
         renderItem={() => null}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyIcon}>💬</Text>
+            <IconChat size={48} color={colors.muted} />
             <Text style={styles.emptyTitle}>Brak czatów</Text>
             <Text style={styles.emptyText}>
               Zacznij rozmowę odpowiadając na zaczepienie
@@ -25,7 +27,7 @@ export default function ChatsScreen() {
           </View>
         }
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.ink} />
         }
       />
     </View>
@@ -35,27 +37,23 @@ export default function ChatsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: colors.bg,
   },
   empty: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 100,
-    paddingHorizontal: 24,
-  },
-  emptyIcon: {
-    fontSize: 64,
-    marginBottom: 16,
+    paddingHorizontal: spacing.section,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
+    ...typ.heading,
+    marginTop: spacing.column,
+    marginBottom: spacing.tight,
   },
   emptyText: {
-    fontSize: 14,
-    color: '#666',
+    ...typ.body,
+    color: colors.muted,
     textAlign: 'center',
   },
 });

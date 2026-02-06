@@ -2,11 +2,13 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { useAuthStore } from '../../src/stores/authStore';
 import { authClient } from '../../src/lib/auth';
+import { colors, type as typ, spacing, fonts } from '../../src/theme';
+import { Avatar } from '../../src/components/ui/Avatar';
+import { Button } from '../../src/components/ui/Button';
 
 export default function ProfileScreen() {
   const user = useAuthStore((state) => state.user);
@@ -20,9 +22,10 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>👤</Text>
-        </View>
+        <Avatar
+          name={user?.email?.charAt(0) || '?'}
+          size={100}
+        />
         <Text style={styles.email}>{user?.email}</Text>
       </View>
 
@@ -40,9 +43,13 @@ export default function ProfileScreen() {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutText}>Wyloguj się</Text>
-      </TouchableOpacity>
+      <View style={styles.logoutContainer}>
+        <Button
+          title="Wyloguj się"
+          variant="accent"
+          onPress={handleLogout}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -50,54 +57,34 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.bg,
   },
   header: {
     alignItems: 'center',
-    paddingVertical: 32,
+    paddingVertical: spacing.block,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#f0f0f0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  avatarText: {
-    fontSize: 48,
+    borderBottomColor: colors.rule,
   },
   email: {
-    fontSize: 16,
-    color: '#666',
+    ...typ.body,
+    color: colors.muted,
+    marginTop: spacing.column,
   },
   section: {
-    padding: 24,
+    padding: spacing.section,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+    borderBottomColor: colors.rule,
   },
   sectionTitle: {
+    ...typ.heading,
     fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: spacing.tight,
   },
   placeholder: {
-    fontSize: 14,
-    color: '#999',
+    ...typ.body,
+    color: colors.muted,
   },
-  logoutButton: {
-    margin: 24,
-    padding: 16,
-    backgroundColor: '#ff3b30',
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  logoutText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  logoutContainer: {
+    margin: spacing.section,
   },
 });

@@ -1,8 +1,8 @@
-# Meet - Aplikacja do Łączenia Osób o Podobnych Zainteresowaniach
+# Blisko - Aplikacja do Łączenia Osób o Podobnych Zainteresowaniach
 
 ## Wizja Produktu
 
-**Meet** to aplikacja mobilna (iOS/Android), która pozwala użytkownikom odkrywać i nawiązywać kontakt z osobami o podobnych zainteresowaniach znajdującymi się w ich okolicy. W przeciwieństwie do aplikacji randkowych, Meet skupia się na budowaniu relacji opartych na wspólnych pasjach - czy to spacerach z psami, grze w kręgle, jeździe na rowerze, czy czytaniu książek Stanisława Lema.
+**Blisko** to aplikacja mobilna (iOS/Android), która pozwala użytkownikom odkrywać i nawiązywać kontakt z osobami o podobnych zainteresowaniach znajdującymi się w ich okolicy. W przeciwieństwie do aplikacji randkowych, Blisko skupia się na budowaniu relacji opartych na wspólnych pasjach - czy to spacerach z psami, grze w kręgle, jeździe na rowerze, czy czytaniu książek Stanisława Lema.
 
 ---
 
@@ -339,11 +339,11 @@ Uczestnicy mogą potwierdzić obecność, widzą kto idzie.
 
 ## Konkurencja
 
-| Aplikacja | Focus | Różnica od Meet |
+| Aplikacja | Focus | Różnica od Blisko |
 |-----------|-------|-----------------|
 | Bumble BFF | Znajomi | Mniej lokalizacyjny, bardziej "swipe" |
 | Meetup | Eventy | Większe grupy, mniej spontaniczne |
 | Nextdoor | Sąsiedzi | Fokus na sąsiedztwo, nie zainteresowania |
 | Tinder | Randki | Romantyczny focus |
 
-**Unikalna wartość Meet**: Łączenie lokalizacji w czasie rzeczywistym z AI-powered matching zainteresowań dla spontanicznych, nieformalnych spotkań.
+**Unikalna wartość Blisko**: Łączenie lokalizacji w czasie rzeczywistym z AI-powered matching zainteresowań dla spontanicznych, nieformalnych spotkań.

@@ -1,4 +1,4 @@
-# Meet - Backlog i Milestony
+# Blisko - Backlog i Milestony
 
 ## Zasady Pracy
 
@@ -82,10 +82,10 @@ npx create-expo-app mobile -t expo-template-blank-typescript
 **E2E Test**:
 ```yaml
 # apps/mobile/.maestro/setup/app-launches.yaml
-appId: com.meet.app
+appId: com.blisko.app
 ---
 - launchApp
-- assertVisible: "Meet"
+- assertVisible: "Blisko"
 ```
 
 **Kryteria akceptacji**:
@@ -104,7 +104,7 @@ appId: com.meet.app
 - `packages/shared/src/validators.ts`
 
 **Kryteria akceptacji**:
-- [ ] Import działa z `@meet/shared`
+- [ ] Import działa z `@repo/shared`
 
 ---
 

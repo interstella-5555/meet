@@ -3,6 +3,8 @@ import { Redirect, Tabs } from 'expo-router';
 import { useAuthStore } from '../../src/stores/authStore';
 import { View, ActivityIndicator, Text } from 'react-native';
 import { trpc } from '../../src/lib/trpc';
+import { colors, type as typ, fonts } from '../../src/theme';
+import { IconPin, IconWave, IconChat, IconPerson } from '../../src/components/ui/icons';
 
 export default function TabsLayout() {
   const user = useAuthStore((state) => state.user);
@@ -32,12 +34,12 @@ export default function TabsLayout() {
   // If API error, show retry button instead of redirecting to onboarding
   if (isError && !hasCheckedProfile) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
-        <Text style={{ fontSize: 16, color: '#666', marginBottom: 16, textAlign: 'center' }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24, backgroundColor: colors.bg }}>
+        <Text style={{ ...typ.body, color: colors.muted, marginBottom: 16, textAlign: 'center' }}>
           Nie udało się połączyć z serwerem
         </Text>
         <Text
-          style={{ color: '#007AFF', fontSize: 16 }}
+          style={{ ...typ.body, color: colors.accent }}
           onPress={() => refetch()}
         >
           Spróbuj ponownie
@@ -48,8 +50,8 @@ export default function TabsLayout() {
 
   if (isLoading || (user && !hasCheckedProfile && isLoadingProfile)) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.bg }}>
+        <ActivityIndicator size="large" color={colors.ink} />
       </View>
     );
   }
@@ -68,7 +70,28 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#007AFF',
+        tabBarActiveTintColor: colors.ink,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: {
+          backgroundColor: colors.bg,
+          borderTopWidth: 2,
+          borderTopColor: colors.ink,
+          height: 75,
+        },
+        tabBarLabelStyle: {
+          fontFamily: fonts.sansMedium,
+          fontSize: 8,
+          letterSpacing: 1.5,
+          textTransform: 'uppercase',
+        },
+        headerStyle: {
+          backgroundColor: colors.bg,
+        },
+        headerTitleStyle: {
+          ...typ.heading,
+          fontSize: 18,
+        },
+        headerShadowVisible: false,
         headerShown: true,
       }}
     >
@@ -76,38 +99,34 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'W okolicy',
-          tabBarIcon: ({ color }) => <TabIcon name="📍" color={color} />,
+          tabBarIcon: ({ color }) => <IconPin size={20} color={color} />,
+          tabBarAccessibilityLabel: 'tab-nearby',
         }}
       />
       <Tabs.Screen
         name="waves"
         options={{
-          title: 'Zaczepienia',
-          tabBarIcon: ({ color }) => <TabIcon name="👋" color={color} />,
+          title: 'Zagadaj',
+          tabBarIcon: ({ color }) => <IconWave size={20} color={color} />,
+          tabBarAccessibilityLabel: 'tab-waves',
         }}
       />
       <Tabs.Screen
         name="chats"
         options={{
           title: 'Czaty',
-          tabBarIcon: ({ color }) => <TabIcon name="💬" color={color} />,
+          tabBarIcon: ({ color }) => <IconChat size={20} color={color} />,
+          tabBarAccessibilityLabel: 'tab-chats',
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
           title: 'Profil',
-          tabBarIcon: ({ color }) => <TabIcon name="👤" color={color} />,
+          tabBarIcon: ({ color }) => <IconPerson size={20} color={color} />,
+          tabBarAccessibilityLabel: 'tab-profile',
         }}
       />
     </Tabs>
-  );
-}
-
-function TabIcon({ name, color }: { name: string; color: string }) {
-  return (
-    <Text style={{ fontSize: 20, opacity: color === '#007AFF' ? 1 : 0.5 }}>
-      {name}
-    </Text>
   );
 }

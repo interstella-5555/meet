@@ -5,7 +5,7 @@
  */
 
 const API_URL = process.env.API_URL || 'http://localhost:3000';
-const TEST_EMAIL = 'e2e-test@meetapp.test';
+const TEST_EMAIL = 'e2e-test@blisko.test';
 const TEST_PASSWORD = 'testpassword123';
 
 async function main() {

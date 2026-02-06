@@ -9,7 +9,7 @@ import {
   conversations,
   conversationParticipants,
 } from '../../db/schema';
-import { sendWaveSchema, respondToWaveSchema, blockUserSchema } from '@meet/shared';
+import { sendWaveSchema, respondToWaveSchema, blockUserSchema } from '@repo/shared';
 import { TRPCError } from '@trpc/server';
 
 export const wavesRouter = router({

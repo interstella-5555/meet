@@ -13,7 +13,7 @@ app.use('*', logger());
 app.use(
   '*',
   cors({
-    origin: ['http://localhost:8081', 'exp://localhost:8081', 'meet://'],
+    origin: ['http://localhost:8081', 'exp://localhost:8081', 'blisko://'],
     credentials: true,
   })
 );

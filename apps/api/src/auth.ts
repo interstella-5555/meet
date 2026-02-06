@@ -15,7 +15,7 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL || 'http://localhost:3000',
   trustedOrigins: [
-    'meet://',
+    'blisko://',
     'exp://',
     'http://localhost:8081',
     'http://localhost:19000',
@@ -35,7 +35,7 @@ export const auth = betterAuth({
         if (type !== 'sign-in') return;
 
         // Build deep link with OTP and email
-        const deepLink = `meet://auth/verify?otp=${otp}&email=${encodeURIComponent(email)}`;
+        const deepLink = `blisko://auth/verify?otp=${otp}&email=${encodeURIComponent(email)}`;
 
         console.log(`OTP for ${email}: ${otp}`);
         console.log(`Deep link: ${deepLink}`);
@@ -43,16 +43,16 @@ export const auth = betterAuth({
         if (resend) {
           try {
             const result = await resend.emails.send({
-              from: process.env.EMAIL_FROM || 'Meet <noreply@meet.app>',
+              from: process.env.EMAIL_FROM || 'Blisko <noreply@blisko.app>',
               to: email,
-              subject: `${otp} - Twój kod do Meet`,
+              subject: `${otp} - Twój kod do Blisko`,
               html: `
                 <div style="font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px;">
-                  <h1 style="text-align: center; color: #007AFF;">Meet</h1>
+                  <h1 style="text-align: center; color: #007AFF;">Blisko</h1>
 
                   <p style="text-align: center; margin-bottom: 8px;">Kliknij żeby się zalogować:</p>
                   <a href="${deepLink}" style="display: block; background: #007AFF; color: white; padding: 14px 24px; text-align: center; text-decoration: none; border-radius: 12px; margin: 0 auto 24px; font-weight: 600;">
-                    Zaloguj się do Meet
+                    Zaloguj się do Blisko
                   </a>
 
                   <div style="text-align: center; color: #999; margin: 24px 0;">

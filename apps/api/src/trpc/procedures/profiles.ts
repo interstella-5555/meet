@@ -9,7 +9,7 @@ import {
   updateLocationSchema,
   getNearbyUsersSchema,
   getNearbyUsersForMapSchema,
-} from '@meet/shared';
+} from '@repo/shared';
 import { toGridCenter, roundDistance } from '../../lib/grid';
 import { generateEmbedding } from '../../services/ai';
 

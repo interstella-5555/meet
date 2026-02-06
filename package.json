@@ -11,6 +11,7 @@
     "clean": "turbo clean && rm -rf node_modules",
     "design:dev": "pnpm --filter @meet/design dev",
     "design:build": "pnpm --filter @meet/design build",
+    "design:start": "pnpm --filter @meet/design start",
     "design:preview": "pnpm --filter @meet/design preview"
   },
   "devDependencies": {

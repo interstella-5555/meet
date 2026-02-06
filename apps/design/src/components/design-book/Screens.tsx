@@ -277,7 +277,17 @@ function ProfileScreen() {
   )
 }
 
-export function Screens() {
+export function Screens({ onlyFirstRow }: { onlyFirstRow?: boolean }) {
+  if (onlyFirstRow) {
+    return (
+      <div className={s.screenRow}>
+        <LoginScreen />
+        <OtpScreen />
+        <ProfileScreen />
+        <WavesReceivedScreen />
+      </div>
+    )
+  }
   return (
     <>
       <div className={s.screenRow}>

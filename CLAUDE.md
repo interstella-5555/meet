@@ -3,27 +3,25 @@
 ## Regenerating README screenshot
 
 The README includes a screenshot of 4 design book screens (Login, OTP, Profile, Waves).
-To regenerate it:
+The screenshot mode is built into the codebase — no temporary changes needed.
 
-1. **Temporarily** add screenshot mode to the codebase:
+**How it works:**
+- `?screenshot` query param on `/design-book` renders only `<Screens onlyFirstRow />` on a white background, hiding the sidebar and all other sections.
+- `onlyFirstRow` prop on `Screens` component renders Login, OTP, Profile, and Waves Received in a single row.
 
-   In `apps/design/src/components/design-book/Screens.tsx`, add an `onlyFirstRow` prop to `Screens` that renders only one `screenRow` with the 4 screens you want (e.g. LoginScreen, OtpScreen, ProfileScreen, WavesReceivedScreen).
+**To regenerate:**
 
-   In `apps/design/src/routes/design-book.tsx`, detect `?screenshot` query param and render just `<Screens onlyFirstRow />` wrapped in `<div style={{ background: '#fff', padding: '48px 64px', display: 'inline-block' }}>`. Make sure hooks are called before the early return.
-
-2. **Capture** the screenshot:
+1. Make sure the dev server is running (`localhost:3000`)
+2. Capture the screenshot:
    ```bash
    npx capture-website-cli "http://localhost:3000/design-book?screenshot" \
      --width 1400 --scale-factor 2 --delay 3 --full-page \
      --disable-animations --hide-elements ".nav" \
      --output docs/screens-vN.png
    ```
+3. Update `README.md` to point to the new filename
+4. Delete the old screenshot file and commit
 
-3. **Update** `README.md` to point to the new filename.
-
-4. **Revert** the temporary code changes:
-   ```bash
-   git checkout -- apps/design/src/routes/design-book.tsx apps/design/src/components/design-book/Screens.tsx
-   ```
-
-5. **Delete** the old screenshot file and commit.
+**Key files:**
+- `apps/design/src/routes/design-book.tsx` — `?screenshot` detection and early return
+- `apps/design/src/components/design-book/Screens.tsx` — `onlyFirstRow` prop

@@ -27,8 +27,10 @@ const SECTIONS = [
 
 function DesignBookPage() {
   const [activeId, setActiveId] = useState(SECTIONS[0].id)
+  const isScreenshot = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('screenshot')
 
   useEffect(() => {
+    if (isScreenshot) return
     const els = SECTIONS.map((sec) => document.getElementById(sec.id)).filter(Boolean) as HTMLElement[]
     if (!els.length) return
 
@@ -45,7 +47,15 @@ function DesignBookPage() {
 
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
-  }, [])
+  }, [isScreenshot])
+
+  if (isScreenshot) {
+    return (
+      <div style={{ background: '#fff', padding: '48px 64px', display: 'inline-block' }}>
+        <Screens onlyFirstRow />
+      </div>
+    )
+  }
 
   return (
     <div className={s.page}>

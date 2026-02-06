@@ -241,3 +241,26 @@
     letter-spacing: 3px;
   }
 }
+
+@media (max-width: 600px) {
+  .main {
+    padding: 0 16px 60px;
+  }
+  .masthead {
+    padding: 32px 0 20px;
+    margin-bottom: 32px;
+  }
+  .mastheadTitle {
+    font-size: 24px;
+    letter-spacing: 2px;
+  }
+  .sectionNumber {
+    font-size: 28px;
+  }
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .section {
+    margin-bottom: 48px;
+  }
+}

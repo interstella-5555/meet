@@ -385,3 +385,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+  .emptyGrid {
+    grid-template-columns: 1fr;
+  }
+}

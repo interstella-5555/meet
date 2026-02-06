@@ -11,12 +11,12 @@ export function PhoneFrame({
     <div
       className={className}
       style={{
-        width: 360,
-        height: 780,
+        width: '100%',
+        maxWidth: 360,
+        aspectRatio: '360/780',
         borderRadius: 40,
         overflow: 'hidden',
         position: 'relative',
-        flexShrink: 0,
       }}
     >
       {children}

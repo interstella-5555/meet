@@ -581,3 +581,12 @@
   border: 1px solid var(--db-error);
   cursor: pointer;
 }
+
+@media (max-width: 600px) {
+  .screenRow {
+    gap: 16px;
+  }
+  .phoneFrame {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+}

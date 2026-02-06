@@ -127,3 +127,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .swatches {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .statusRow {
+    grid-template-columns: 1fr;
+  }
+}

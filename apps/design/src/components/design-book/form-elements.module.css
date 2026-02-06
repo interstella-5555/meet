@@ -427,3 +427,12 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 600px) {
+  .inputGrid {
+    grid-template-columns: 1fr;
+  }
+  .badgeGrid {
+    grid-template-columns: 1fr;
+  }
+}

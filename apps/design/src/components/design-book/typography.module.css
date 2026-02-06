@@ -83,3 +83,13 @@
     width: auto;
   }
 }
+
+@media (max-width: 600px) {
+  .specimen {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .specMeta {
+    width: auto;
+  }
+}

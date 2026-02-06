@@ -1,30 +1,24 @@
-# Blisko - Architektura Techniczna
+# Blisko — Architecture
 
-## Przegląd Stosu Technologicznego
+## Stack Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     KLIENT MOBILNY                               │
+│                        MOBILE CLIENT                            │
 ├─────────────────────────────────────────────────────────────────┤
-│  React Native + Expo SDK 54                                      │
-│  TypeScript                                                      │
-│  Expo Router v3 (file-based routing)                            │
-│  Zustand v5 (state management)                                  │
-│  @trpc/react-query (type-safe API)                              │
-│  Better Auth (authentication)                                    │
+│  React Native 0.81 + Expo SDK 54                                │
+│  Expo Router v6 (file-based routing)                            │
+│  TypeScript · Zustand v5 · tRPC client · Better Auth client     │
 └─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                     RAILWAY BACKEND                              │
+│                        API SERVER                               │
 ├─────────────────────────────────────────────────────────────────┤
-│  Hono (web framework)                                            │
-│  tRPC (type-safe API)                                           │
-│  Better Auth (authentication)                                    │
-│  Drizzle ORM                                                    │
-│  OpenAI API (embeddings)                                        │
-│  Expo Push API                                                  │
-└────────────────────────────────────────────────────────────────┘
+│  Hono (web framework) · tRPC (type-safe API)                    │
+│  Better Auth (magic link) · Drizzle ORM                         │
+│  OpenAI (embeddings) · Resend (email) · Expo Push API           │
+└─────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
@@ -32,178 +26,130 @@
 ├─────────────────────────────────────────────────────────────────┤
 │  PostgreSQL + pgvector (similarity search)                      │
 └─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│                      DESIGN BOOK (web)                           │
+├─────────────────────────────────────────────────────────────────┤
+│  React 19 · TanStack Start · Tailwind CSS 4 · Vite 7           │
+│  13 design variants · component gallery · screenshot mode       │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Podział Odpowiedzialności
-
-| Komponent | Technologia |
-|-----------|-------------|
-| **Auth** | Better Auth (magic link email) |
-| **Database** | Railway PostgreSQL + Drizzle ORM |
-| **API** | Hono + tRPC |
-| **AI** | OpenAI embeddings |
-| **Push** | Expo Push API |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Mobile | React Native + Expo SDK 54 | Cross-platform app |
+| Routing | Expo Router v6 | File-based navigation |
+| State | Zustand v5 | Client state management |
+| Backend | Hono | HTTP framework |
+| API | tRPC v11 | End-to-end type safety |
+| ORM | Drizzle | Type-safe PostgreSQL access |
+| Auth | Better Auth | Self-hosted magic link email |
+| Database | Railway PostgreSQL | Managed Postgres + pgvector |
+| Email | Resend | Transactional email |
+| AI | OpenAI | Profile embeddings |
+| Design | TanStack Start + Tailwind | Design system gallery |
+| Tests | Vitest + Maestro | Unit + E2E |
 
 ---
 
-## Decyzje Technologiczne
-
-| Warstwa | Technologia | Uzasadnienie |
-|---------|-------------|--------------|
-| Mobile | React Native + Expo SDK 54 | Cross-platform |
-| Routing | Expo Router v3 | File-based routing |
-| State | Zustand v5 | Prostszy niż Redux |
-| **Backend** | **Hono** | Ultraszybki, Web Standards |
-| **API** | **tRPC** | End-to-end type safety |
-| **ORM** | **Drizzle** | Type-safe, PostgreSQL native |
-| **Auth** | **Better Auth** | Self-hosted, magic link |
-| **Database** | **Railway PostgreSQL** | Managed, pgvector |
-| **Testy** | **Vitest** + Maestro | Natywne TS + E2E |
-
----
-
-## Struktura Monorepo
+## Monorepo Structure
 
 ```
-/meet
+blisko/
 ├── apps/
-│   ├── mobile/                    # Expo app (React Native)
-│   │   ├── app/                   # Expo Router routes
-│   │   │   ├── (auth)/
-│   │   │   │   ├── _layout.tsx
-│   │   │   │   ├── login.tsx
-│   │   │   │   └── verify.tsx
-│   │   │   ├── onboarding/
-│   │   │   │   ├── index.tsx      # Step 1: Name
-│   │   │   │   ├── bio.tsx        # Step 2: Bio
-│   │   │   │   └── looking-for.tsx # Step 3: Looking for
-│   │   │   ├── (tabs)/
-│   │   │   │   ├── _layout.tsx
-│   │   │   │   ├── index.tsx      # Osoby w okolicy
-│   │   │   │   ├── waves.tsx      # Zaczepienia
-│   │   │   │   ├── chats.tsx      # Lista czatów
-│   │   │   │   └── profile.tsx    # Profil
-│   │   │   ├── (modals)/
-│   │   │   │   ├── user/[id].tsx
-│   │   │   │   └── chat/[id].tsx
-│   │   │   └── _layout.tsx
-│   │   │
+│   ├── mobile/                     # Expo app (React Native)
+│   │   ├── app/                    # Expo Router routes
+│   │   │   ├── (auth)/             # login, verify
+│   │   │   ├── onboarding/         # name, bio, looking-for
+│   │   │   └── (tabs)/             # nearby, waves, chats, profile
 │   │   ├── src/
-│   │   │   ├── lib/
-│   │   │   │   ├── trpc.ts        # tRPC client
-│   │   │   │   └── auth.ts        # Better Auth client
-│   │   │   ├── stores/
-│   │   │   │   ├── authStore.ts
-│   │   │   │   ├── locationStore.ts
-│   │   │   │   └── onboardingStore.ts
-│   │   │   └── hooks/
-│   │   │
-│   │   ├── .maestro/              # E2E tests
-│   │   └── package.json
+│   │   │   ├── components/         # UI + feature components
+│   │   │   ├── hooks/
+│   │   │   ├── lib/                # trpc client, auth client
+│   │   │   ├── stores/             # Zustand (auth, chat, location, onboarding)
+│   │   │   ├── types/
+│   │   │   └── utils/
+│   │   └── .maestro/               # E2E tests
 │   │
-│   └── api/                       # Hono backend (Railway)
+│   ├── api/                        # Hono backend (Railway)
+│   │   ├── src/
+│   │   │   ├── index.ts            # Hono entry
+│   │   │   ├── auth.ts             # Better Auth config
+│   │   │   ├── trpc/
+│   │   │   │   ├── router.ts
+│   │   │   │   ├── context.ts
+│   │   │   │   └── procedures/     # profiles, waves, messages
+│   │   │   ├── db/
+│   │   │   │   └── schema.ts       # Drizzle schema
+│   │   │   └── services/
+│   │   │       └── ai.ts           # OpenAI embeddings
+│   │   └── drizzle/
+│   │       └── migrations/
+│   │
+│   └── design/                     # Design book (web, TanStack Start)
 │       ├── src/
-│       │   ├── index.ts           # Hono entry
-│       │   ├── auth.ts            # Better Auth setup
-│       │   ├── trpc/
-│       │   │   ├── router.ts      # Main router
-│       │   │   ├── context.ts     # Auth context
-│       │   │   └── procedures/
-│       │   │       ├── profiles.ts
-│       │   │       ├── waves.ts
-│       │   │       └── messages.ts
-│       │   └── db/
-│       │       ├── index.ts       # Drizzle client
-│       │       └── schema.ts      # Drizzle schema
-│       │
-│       ├── drizzle/
-│       │   └── migrations/
-│       └── package.json
+│       │   ├── routes/             # design-book, proposals
+│       │   ├── components/
+│       │   │   └── design-book/    # Screens, FormElements, Typography, etc.
+│       │   └── variants/           # 13 design variants (v1-*, v2-*)
+│       └── content/                # Content collections
 │
 ├── packages/
-│   └── shared/                    # Shared types/validators
-│
-├── .github/
-│   └── workflows/
-│       └── e2e-tests.yml
+│   └── shared/                     # Shared types + Zod validators
 │
 ├── pnpm-workspace.yaml
-├── package.json
-└── turbo.json
+├── turbo.json
+└── package.json
 ```
+
+---
+
+## Database Schema
+
+| Table | Purpose |
+|-------|---------|
+| `user` | Accounts (Better Auth managed) |
+| `session` | Sessions (Better Auth managed) |
+| `account` | Auth providers (Better Auth managed) |
+| `verification` | Email verification tokens |
+| `profiles` | Display name, bio, lookingFor, avatar URL, embedding, location |
+| `waves` | Wave requests (from → to, message, status) |
+| `conversations` | Chat conversations |
+| `conversationParticipants` | Conversation membership |
+| `messages` | Chat messages |
+| `blocks` | User block list |
+| `pushTokens` | Expo push notification tokens |
 
 ---
 
 ## Environment Variables
 
-### Backend (apps/api/.env)
+### Backend (`apps/api/.env`)
 
 ```bash
-# Server
-PORT=3000
-
-# Database (Railway PostgreSQL)
-DATABASE_URL=postgresql://user:pass@host:5432/railway
-
-# Better Auth
-BETTER_AUTH_SECRET=your-secret
-BETTER_AUTH_URL=https://your-api.up.railway.app
-
-# Email (Resend)
-RESEND_API_KEY=re_xxx
-
-# OpenAI (for embeddings)
-OPENAI_API_KEY=sk-xxx
-
-# Development
-ENABLE_DEV_LOGIN=true  # Enable @example.com auto-login
+DATABASE_URL=postgresql://...       # Railway PostgreSQL
+BETTER_AUTH_SECRET=...              # Auth secret
+BETTER_AUTH_URL=...                 # API base URL
+RESEND_API_KEY=...                  # Transactional email
+OPENAI_API_KEY=...                  # Profile embeddings
+ENABLE_DEV_LOGIN=true               # @example.com auto-login (dev only)
 ```
 
-### Mobile (apps/mobile/.env.local)
+### Mobile (`apps/mobile/.env.local`)
 
 ```bash
-EXPO_PUBLIC_API_URL=https://your-api.up.railway.app
+EXPO_PUBLIC_API_URL=...             # API server URL
 ```
 
 ---
 
-## Development Workflow
+## Development
 
 ```bash
-# Start all services
-pnpm dev
-
-# Mobile only
-pnpm --filter mobile start
-
-# API only
-pnpm --filter api dev
-
-# Run E2E tests
-pnpm --filter mobile test:e2e
-
-# Database migrations
-pnpm --filter api db:push
+pnpm dev                            # Start all services
+pnpm --filter mobile start          # Mobile only
+pnpm --filter api dev               # API only
+pnpm --filter @repo/design dev      # Design book only
+pnpm --filter api db:push           # Push DB migrations
+pnpm test                           # Run all tests
 ```
-
----
-
-## Koszty
-
-### POC/Development
-
-| Usługa | Koszt/miesiąc |
-|--------|---------------|
-| Railway (API + DB) | ~$5 |
-| OpenAI | ~$0 (pay-per-use) |
-| Resend | Free tier |
-| **Razem** | **~$5** |
-
-### Produkcja (~10k users)
-
-| Usługa | Koszt/miesiąc |
-|--------|---------------|
-| Railway Pro | ~$20 |
-| OpenAI | ~$10 |
-| Resend | ~$20 |
-| **Razem** | **~$50** |

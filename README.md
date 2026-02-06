@@ -3,7 +3,7 @@
 A mobile app for discovering and connecting with people who share your interests, right in your neighborhood.
 
 <p align="center">
-  <img src="docs/screens-v2.png" alt="Login, OTP verification, waves, and profile screens" width="800" />
+  <img src="docs/screens-v3.png" alt="Login, OTP verification, and profile screens" width="800" />
 </p>
 
 **[Browse the Design Book →](https://design.meetapp.work)**

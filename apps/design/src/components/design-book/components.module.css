@@ -360,6 +360,8 @@
 
 .emptyIcon {
   margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
 }
 
 .emptyTitle {

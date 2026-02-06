@@ -95,11 +95,11 @@ export default function NeoBrutalist() {
       <div className={s.tabs}>
         <div className={`${s.tab} active`}>
           <Icon name="pin" className={s.tabIcon} />
-          <span>Obok</span>
+          <span>Blisko</span>
         </div>
         <div className={s.tab}>
           <Icon name="wave" className={s.tabIcon} />
-          <span>Fale</span>
+          <span>Zaczepienia</span>
         </div>
         <div className={s.tab}>
           <Icon name="chat" className={s.tabIcon} />

@@ -68,14 +68,17 @@ export function FormElements() {
             </div>
           </div>
 
-          <div className={s.buttonItem}>
+          <div className={`${s.buttonItem} ${s.buttonItemFull}`}>
             <div className={s.buttonLabel}>Full Width</div>
             <div className={s.buttonRowFull}>
-              <button className={s.btnFull}>Wyślij link</button>
-              <button className={`${s.btnFull} ${s.btnDisabled}`}>Wyślij link</button>
-            </div>
-            <div className={s.stateLabels}>
-              <span>Default</span><span>Disabled</span>
+              <div>
+                <button className={s.btnFull}>Wyślij link</button>
+                <span className={s.stateLabel}>Default</span>
+              </div>
+              <div>
+                <button className={`${s.btnFull} ${s.btnDisabled}`}>Wyślij link</button>
+                <span className={s.stateLabel}>Disabled</span>
+              </div>
             </div>
           </div>
         </div>

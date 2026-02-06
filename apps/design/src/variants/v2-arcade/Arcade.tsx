@@ -111,7 +111,7 @@ export default function Arcade() {
         </div>
         <div className={s.tab}>
           <Icon name="zap" className={s.tabIcon} />
-          <span>Fale</span>
+          <span>Zaczepienia</span>
         </div>
         <div className={s.tab}>
           <Icon name="chat" className={s.tabIcon} />

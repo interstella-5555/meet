@@ -8,8 +8,8 @@ function StatusBar() {
 
 function TabBar({ active = 0 }: { active?: number }) {
   const tabs = [
-    { icon: 'pin', label: 'Obok' },
-    { icon: 'wave', label: 'Fale' },
+    { icon: 'pin', label: 'Blisko' },
+    { icon: 'wave', label: 'Zaczepienia' },
     { icon: 'chat', label: 'Czaty' },
     { icon: 'person', label: 'Profil' },
   ]

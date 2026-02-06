@@ -132,7 +132,7 @@ export default function Constellation() {
         </div>
         <div className={s.tab}>
           <Icon name="wave" className={s.tabIcon} />
-          <span>Fale</span>
+          <span>Zaczepienia</span>
         </div>
         <div className={s.tab}>
           <Icon name="chat" className={s.tabIcon} />

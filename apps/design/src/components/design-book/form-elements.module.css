@@ -27,9 +27,14 @@
 .buttonItem {
   background: var(--db-bg);
   padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  justify-content: start;
+  gap: 0 16px;
 }
 
 .buttonLabel {
+  grid-column: 1 / -1;
   font-family: 'Instrument Serif', serif;
   font-size: 13px;
   color: var(--db-ink);
@@ -37,32 +42,44 @@
 }
 
 .buttonRow {
-  display: flex;
-  gap: 16px;
-  align-items: center;
+  display: contents;
+}
+
+.buttonRow > * {
   margin-bottom: 6px;
+}
+
+.buttonItemFull {
+  display: block;
 }
 
 .buttonRowFull {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-width: 320px;
+  gap: 16px;
   margin-bottom: 6px;
 }
 
-.stateLabels {
-  display: flex;
-  gap: 16px;
+.stateLabel {
+  display: block;
+  text-align: center;
   font-size: 9px;
   color: var(--db-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin-top: 6px;
+}
+
+.stateLabels {
+  display: contents;
 }
 
 .stateLabels span {
-  min-width: 34px;
   text-align: center;
+  font-size: 9px;
+  color: var(--db-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Primary - circle wave button */

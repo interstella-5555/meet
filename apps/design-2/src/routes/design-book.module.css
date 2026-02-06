@@ -1,0 +1,243 @@
+/* ─────────────────────────────────────────────
+   DESIGN BOOK — Newspaper / Editorial
+   ───────────────────────────────────────────── */
+
+:root {
+  --db-ink: #1A1A1A;
+  --db-bg: #FAF7F2;
+  --db-accent: #C0392B;
+  --db-rule: #D5D0C4;
+  --db-muted: #8B8680;
+  --db-map-bg: #F0ECE3;
+  --db-map-block: #E2DDD2;
+  --db-success: #5B7A5E;
+  --db-warning: #B8863E;
+  --db-error: #9B3B3B;
+  --db-success-bg: #EEF2EE;
+  --db-warning-bg: #F5F0E6;
+  --db-error-bg: #F2EEEE;
+}
+
+/* ── Page Layout ────────────────────────────── */
+
+.page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--db-bg);
+  color: var(--db-ink);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Sidebar Navigation ─────────────────────── */
+
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 1px solid var(--db-rule);
+  padding: 32px 0;
+  background: var(--db-bg);
+}
+
+.sidebarTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--db-muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0 24px;
+  margin-bottom: 24px;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  display: block;
+}
+
+.navLink {
+  display: block;
+  padding: 8px 24px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--db-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.navLink:hover {
+  color: var(--db-ink);
+  border-left-color: var(--db-rule);
+}
+
+.navLink:active {
+  color: var(--db-accent);
+  border-left-color: var(--db-accent);
+}
+
+.navNumber {
+  display: inline-block;
+  width: 20px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-rule);
+  font-style: italic;
+}
+
+/* ── Main Content ────────────────────────────── */
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: 0 56px 120px;
+}
+
+/* ── Masthead Header ─────────────────────────── */
+
+.masthead {
+  padding: 48px 0 32px;
+  text-align: center;
+  border-bottom: 3px double var(--db-ink);
+  margin-bottom: 56px;
+}
+
+.mastheadTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: var(--db-ink);
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+
+.mastheadDash {
+  color: var(--db-accent);
+}
+
+.mastheadEdition {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--db-muted);
+}
+
+/* ── Section Layout ──────────────────────────── */
+
+.section {
+  margin-bottom: 72px;
+  scroll-margin-top: 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  border-bottom: 1px solid var(--db-ink);
+  padding-bottom: 8px;
+  margin-bottom: 32px;
+}
+
+.sectionNumber {
+  font-family: 'Instrument Serif', serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--db-rule);
+  font-style: italic;
+  line-height: 1;
+}
+
+.sectionTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--db-ink);
+}
+
+.sectionSubtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--db-muted);
+  margin-top: 8px;
+  margin-bottom: 32px;
+  max-width: 640px;
+  line-height: 1.6;
+}
+
+/* ── Subsection ──────────────────────────────── */
+
+.subsection {
+  margin-bottom: 40px;
+}
+
+.subsectionTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-muted);
+  margin-bottom: 16px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+/* ── Generic Grid ────────────────────────────── */
+
+.grid {
+  display: grid;
+  gap: 1px;
+  background: var(--db-rule);
+}
+
+.gridItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+/* ── Back Link ───────────────────────────────── */
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+  text-decoration: none;
+  padding: 16px 0;
+  transition: color 0.2s;
+}
+
+.backLink:hover {
+  color: var(--db-ink);
+}
+
+/* ── Responsive ──────────────────────────────── */
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .main {
+    padding: 0 24px 80px;
+  }
+  .mastheadTitle {
+    font-size: 32px;
+    letter-spacing: 3px;
+  }
+}

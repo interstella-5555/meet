@@ -1,0 +1,412 @@
+/* ── Form Elements ────────────────────────── */
+
+.group {
+  margin-bottom: 48px;
+}
+
+.groupTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-muted);
+  margin-bottom: 20px;
+}
+
+/* ── Buttons ──────────────────────────────── */
+
+.buttonGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.buttonItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.buttonLabel {
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  margin-bottom: 12px;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.buttonRowFull {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 320px;
+  margin-bottom: 6px;
+}
+
+.stateLabels {
+  display: flex;
+  gap: 16px;
+  font-size: 9px;
+  color: var(--db-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stateLabels span {
+  min-width: 34px;
+  text-align: center;
+}
+
+/* Primary - circle wave button */
+.btnPrimary {
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: 1px solid var(--db-ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--db-ink);
+}
+
+.btnPrimary.btnHover {
+  background: var(--db-ink);
+  color: var(--db-bg);
+}
+
+.btnPrimary.btnPressed {
+  background: var(--db-ink);
+  color: var(--db-bg);
+  transform: scale(0.95);
+}
+
+.btnPrimary.btnDisabled {
+  border-color: var(--db-rule);
+  color: var(--db-rule);
+  cursor: not-allowed;
+}
+
+/* Accent Fill */
+.btnAccent {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  background: var(--db-accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btnAccent.btnHover {
+  background: #a83226;
+}
+
+.btnAccent.btnPressed {
+  background: #922b21;
+  transform: scale(0.98);
+}
+
+.btnAccent.btnDisabled {
+  background: var(--db-rule);
+  color: var(--db-muted);
+  cursor: not-allowed;
+}
+
+/* Secondary Ghost */
+.btnSecondary {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  background: none;
+  color: var(--db-accent);
+  border: none;
+  cursor: pointer;
+}
+
+.btnSecondary.btnHover {
+  color: #a83226;
+}
+
+.btnSecondary.btnPressed {
+  color: #922b21;
+}
+
+.btnSecondary.btnDisabled {
+  color: var(--db-rule);
+  cursor: not-allowed;
+}
+
+/* Destructive */
+.btnDestructive {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 10px 24px;
+  background: var(--db-error-bg);
+  color: var(--db-error);
+  border: 1px solid var(--db-error);
+  cursor: pointer;
+}
+
+.btnDestructive.btnHover {
+  background: var(--db-error);
+  color: #fff;
+}
+
+.btnDestructive.btnPressed {
+  background: #7a2e2e;
+  color: #fff;
+}
+
+.btnDestructive.btnDisabled {
+  background: var(--db-bg);
+  border-color: var(--db-rule);
+  color: var(--db-rule);
+  cursor: not-allowed;
+}
+
+/* Full Width */
+.btnFull {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 14px 24px;
+  background: var(--db-ink);
+  color: var(--db-bg);
+  border: none;
+  cursor: pointer;
+}
+
+.btnFull.btnDisabled {
+  background: var(--db-rule);
+  color: var(--db-muted);
+  cursor: not-allowed;
+}
+
+/* ── Inputs ───────────────────────────────── */
+
+.inputGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.inputItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.inputLabel {
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  margin-bottom: 12px;
+}
+
+.inputDemo {
+  margin-bottom: 12px;
+}
+
+.fieldLabel {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+  margin-bottom: 6px;
+}
+
+.inputField {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--db-ink);
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--db-ink);
+  background: none;
+  width: 100%;
+}
+
+.inputEmpty {
+  color: var(--db-rule);
+  border-bottom-color: var(--db-rule);
+  font-style: italic;
+  font-family: 'Instrument Serif', serif;
+}
+
+.textareaField {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--db-ink);
+  background: none;
+  width: 100%;
+  min-height: 72px;
+  line-height: 1.6;
+}
+
+.charCount {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* OTP */
+.otpRow {
+  display: flex;
+  gap: 8px;
+}
+
+.otpDigit {
+  width: 40px;
+  height: 48px;
+  border: 1px solid var(--db-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: var(--db-ink);
+  background: var(--db-bg);
+}
+
+.otpFilled {
+  border-color: var(--db-ink);
+}
+
+.otpActive {
+  border-color: var(--db-accent);
+  box-shadow: 0 0 0 1px var(--db-accent);
+}
+
+.otpError {
+  border-color: var(--db-error);
+  color: var(--db-error);
+}
+
+.errorText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-error);
+  margin-top: 8px;
+}
+
+/* ── Tags & Badges ────────────────────────── */
+
+.badgeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.badgeItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.badgeLabel {
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  margin-bottom: 12px;
+}
+
+.tagRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--db-muted);
+}
+
+.tagMatch {
+  color: var(--db-accent);
+  font-weight: 600;
+}
+
+.statusBadge {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+
+.counterBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--db-accent);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.counterMuted {
+  background: var(--db-muted);
+}
+
+.distBadge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: var(--db-muted);
+}
+
+.badgeNote {
+  font-size: 9px;
+  color: var(--db-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .inputGrid,
+  .badgeGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,397 @@
+:root {
+  --ink: #1A1A1A;
+  --bg: #FAF7F2;
+  --accent: #C0392B;
+  --rule: #D5D0C4;
+  --muted: #8B8680;
+}
+
+.phoneFrame {
+  --ink: #1A1A1A;
+  --bg: #FAF7F2;
+  --accent: #C0392B;
+  --rule: #D5D0C4;
+  --muted: #8B8680;
+  background: var(--bg);
+  border: 1px solid #D5D0C4;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.statusBar {
+  height: 50px;
+  background: var(--bg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--muted);
+  border-bottom: 1px solid var(--rule);
+}
+
+.masthead {
+  padding: 8px 16px;
+  text-align: center;
+  border-bottom: 3px double var(--ink);
+}
+
+.masthead h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  letter-spacing: 2px;
+}
+
+.edition {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.mapArea {
+  height: 280px;
+  background: #F0ECE3;
+  position: relative;
+  overflow: hidden;
+  margin: 0 12px;
+  border: 1px solid var(--rule);
+  border-top: none;
+}
+
+.mapGrid {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, #e0dbd0 39px, #e0dbd0 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, #e0dbd0 39px, #e0dbd0 40px);
+  opacity: 0.5;
+}
+
+.mapBlock {
+  position: absolute;
+  background: #E2DDD2;
+}
+
+.mapBlock1 {
+  top: 50px;
+  left: 30px;
+  width: 90px;
+  height: 60px;
+}
+
+.mapBlock2 {
+  top: 140px;
+  left: 150px;
+  width: 120px;
+  height: 40px;
+}
+
+.mapBlock3 {
+  top: 70px;
+  left: 220px;
+  width: 50px;
+  height: 100px;
+}
+
+.mapRoad {
+  position: absolute;
+  background: var(--bg);
+}
+
+.roadH1 {
+  top: 120px;
+  left: 0;
+  right: 0;
+  height: 6px;
+}
+
+.roadV1 {
+  top: 0;
+  bottom: 0;
+  left: 160px;
+  width: 6px;
+}
+
+.marker {
+  position: absolute;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.markerGroup {
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  border-radius: 50%;
+  top: 80px;
+  left: 170px;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(192,57,43,0.3);
+}
+
+.markerSmall {
+  width: 28px;
+  height: 28px;
+  background: var(--ink);
+  border-radius: 50%;
+  top: 180px;
+  left: 70px;
+  font-size: 12px;
+}
+
+.markerAvatar {
+  width: 42px;
+  height: 42px;
+  top: 140px;
+  left: 250px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--accent);
+}
+
+.markerAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.myLoc {
+  position: absolute;
+  top: 125px;
+  left: 148px;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.radiusBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  padding: 4px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.sheet {
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  right: 0;
+  top: 380px;
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+
+.sheetHandleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 0;
+}
+
+.sheetHandle {
+  width: 32px;
+  height: 3px;
+  background: var(--rule);
+}
+
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 16px 6px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.sheetCount {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.sheetCount span {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.sheetAction {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: none;
+  border: none;
+}
+
+.userList {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.userCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--rule);
+  filter: grayscale(30%);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.dist {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+
+.tag::before {
+  content: '§ ';
+  color: var(--rule);
+}
+
+.match {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.waveBtn {
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.waveBtn svg {
+  width: 18px;
+  height: 18px;
+  color: var(--ink);
+}
+
+.tabs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  background: var(--bg);
+  border-top: 2px solid var(--ink);
+  display: flex;
+  padding-top: 6px;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 6px;
+}
+
+.tabIcon {
+  width: 20px;
+  height: 20px;
+  color: var(--muted);
+}
+
+.tab span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.active span {
+  color: var(--accent);
+}
+
+.active .tabIcon {
+  color: var(--accent);
+}

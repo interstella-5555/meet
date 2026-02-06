@@ -1,0 +1,399 @@
+.phoneFrame {
+  --navy: #0B1E3F;
+  --cyan: #00BCD4;
+  --amber: #FFB300;
+  --white: #F5F7FA;
+  --muted: #6B89B0;
+  background: var(--navy);
+  border: 1px solid #1A3460;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.statusBar {
+  height: 50px;
+  background: var(--navy);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.headerBar {
+  padding: 6px 16px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.headerBar h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.headerBar :global(.temp) {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+}
+
+.mapArea {
+  height: 300px;
+  background: linear-gradient(180deg, #0D2247 0%, #132D54 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Isobars */
+.isobars {
+  position: absolute;
+  inset: 0;
+}
+
+.isobars svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Temperature gradient zones */
+.heatZone {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: 0.3;
+}
+
+.heat1 {
+  top: 60px;
+  left: 120px;
+  width: 120px;
+  height: 120px;
+  background: var(--amber);
+}
+
+.heat2 {
+  top: 160px;
+  left: 40px;
+  width: 80px;
+  height: 80px;
+  background: var(--cyan);
+  opacity: 0.2;
+}
+
+.heat3 {
+  top: 100px;
+  left: 240px;
+  width: 90px;
+  height: 90px;
+  background: #FF5722;
+  opacity: 0.15;
+}
+
+/* H/L markers */
+.pressureMark {
+  position: absolute;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  opacity: 0.25;
+}
+
+.markH {
+  color: var(--amber);
+  top: 40px;
+  left: 50px;
+}
+
+.markL {
+  color: var(--cyan);
+  top: 200px;
+  right: 40px;
+}
+
+.marker {
+  position: absolute;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.markerGroup {
+  width: 42px;
+  height: 42px;
+  background: rgba(255,179,0,0.25);
+  border: 2px solid var(--amber);
+  top: 90px;
+  left: 160px;
+  font-size: 16px;
+  box-shadow: 0 0 16px rgba(255,179,0,0.3);
+}
+
+.markerSmall {
+  width: 32px;
+  height: 32px;
+  background: rgba(0,188,212,0.2);
+  border: 2px solid var(--cyan);
+  top: 190px;
+  left: 80px;
+  font-size: 13px;
+}
+
+.markerAvatar {
+  width: 44px;
+  height: 44px;
+  top: 130px;
+  left: 260px;
+  overflow: hidden;
+  border: 2px solid var(--amber);
+  box-shadow: 0 0 12px rgba(255,179,0,0.2);
+}
+
+.markerAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.myLoc {
+  position: absolute;
+  top: 140px;
+  left: 150px;
+  width: 14px;
+  height: 14px;
+  background: var(--cyan);
+  border-radius: 50%;
+  border: 2px solid var(--navy);
+  box-shadow: 0 0 8px var(--cyan);
+}
+
+.radiusBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(11,30,63,0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,188,212,0.3);
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.radiusBadge :global(.dot) {
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 4px var(--cyan);
+}
+
+.sheet {
+  position: absolute;
+  bottom: 75px;
+  left: 0;
+  right: 0;
+  top: 395px;
+  background: #0D2247;
+  border-top: 1px solid rgba(0,188,212,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.sheetHandleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0 0;
+}
+
+.sheetHandle {
+  width: 32px;
+  height: 3px;
+  background: #1A3460;
+  border-radius: 2px;
+}
+
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px 6px;
+}
+
+.sheetCount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.sheetCount strong {
+  color: var(--amber);
+}
+
+.sheetAction {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: none;
+  border: none;
+}
+
+.userList {
+  flex: 1;
+  overflow: hidden;
+  padding: 4px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  background: rgba(26,52,96,0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(0,188,212,0.1);
+}
+
+.userCard :global(.avatar) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,179,0,0.3);
+}
+
+.userCard :global(.avatar) img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.userCard :global(.info) {
+  flex: 1;
+  min-width: 0;
+}
+
+.userCard :global(.nameRow) {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.userCard :global(.name) {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.userCard :global(.dist) {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+}
+
+.userCard :global(.tags) {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.userCard :global(.tag) {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(107,137,176,0.1);
+  border: 1px solid rgba(107,137,176,0.15);
+}
+
+.userCard :global(.tag.match) {
+  color: var(--amber);
+  background: rgba(255,179,0,0.1);
+  border-color: rgba(255,179,0,0.2);
+}
+
+.userCard :global(.waveBtn) {
+  width: 34px;
+  height: 34px;
+  background: rgba(0,188,212,0.15);
+  border: 1px solid rgba(0,188,212,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.userCard :global(.waveBtn) svg {
+  width: 18px;
+  height: 18px;
+  color: var(--cyan);
+}
+
+.tabs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  background: var(--navy);
+  border-top: 1px solid #1A3460;
+  display: flex;
+  padding-top: 6px;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 6px;
+}
+
+.tab svg {
+  width: 22px;
+  height: 22px;
+}
+
+.tab span {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.tab.active span {
+  color: var(--cyan);
+}
+
+.tab .tabIcon {
+  color: var(--muted);
+}
+
+.tab.active .tabIcon {
+  color: var(--cyan);
+}

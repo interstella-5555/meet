@@ -1,0 +1,583 @@
+/* ── Screens ──────────────────────────────── */
+
+.screenRow {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.screenCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.screenLabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+}
+
+.phoneFrame {
+  background: var(--db-bg);
+  border: 1px solid var(--db-rule);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Status Bar ──────────────────────────── */
+
+.statusBar {
+  height: 50px;
+  background: var(--db-bg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-muted);
+  border-bottom: 1px solid var(--db-rule);
+}
+
+/* ── Tab Bar ─────────────────────────────── */
+
+.tabs {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 75px;
+  background: var(--db-bg);
+  border-top: 2px solid var(--db-ink);
+  display: flex;
+  padding-top: 6px;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 6px;
+  color: var(--db-muted);
+}
+
+.tab span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tabActive {
+  color: var(--db-accent);
+}
+
+/* ── Login Screen ─────────────────────────── */
+
+.loginBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+  padding-top: 80px;
+}
+
+.loginMasthead {
+  text-align: center;
+  margin-bottom: 48px;
+  padding-bottom: 16px;
+  border-bottom: 3px double var(--db-ink);
+  width: 100%;
+}
+
+.loginTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--db-ink);
+  letter-spacing: 4px;
+}
+
+.loginEdition {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-muted);
+  margin-top: 4px;
+}
+
+.loginForm {
+  width: 100%;
+}
+
+.label {
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+  margin-bottom: 6px;
+}
+
+.inputField {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--db-ink);
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--db-ink);
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.btnFull {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 14px;
+  background: var(--db-ink);
+  color: var(--db-bg);
+  border: none;
+  cursor: pointer;
+}
+
+/* ── OTP Screen ──────────────────────────── */
+
+.otpBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px;
+}
+
+.otpIcon {
+  margin-bottom: 20px;
+}
+
+.otpTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--db-ink);
+  margin-bottom: 8px;
+}
+
+.otpText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--db-muted);
+  margin-bottom: 4px;
+}
+
+.otpEmail {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--db-ink);
+  margin-bottom: 32px;
+}
+
+.otpRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.otpDigit {
+  width: 40px;
+  height: 48px;
+  border: 1px solid var(--db-rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  color: var(--db-ink);
+}
+
+.otpFilled {
+  border-color: var(--db-ink);
+}
+
+.otpResend {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+  margin-bottom: 16px;
+}
+
+.backBtn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* ── Onboarding Screen ───────────────────── */
+
+.onboardBody {
+  padding: 60px 24px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stepIndicator {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+  margin-bottom: 16px;
+}
+
+.onboardTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--db-ink);
+  margin-bottom: 8px;
+}
+
+.onboardSub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--db-muted);
+  line-height: 1.5;
+  margin-bottom: 32px;
+}
+
+.onboardSpacer {
+  flex: 1;
+  min-height: 40px;
+}
+
+/* ── Waves Screens ───────────────────────── */
+
+.wavesHeader {
+  padding: 12px 16px 8px;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+.wavesTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--db-ink);
+}
+
+.waveTabBar {
+  display: flex;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+.waveTab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--db-muted);
+  border-bottom: 2px solid transparent;
+}
+
+.waveTabActive {
+  color: var(--db-ink);
+  border-bottom-color: var(--db-accent);
+}
+
+.tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--db-accent);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.tabBadgeMuted {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--db-muted);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.wavesList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wCard {
+  border: 1px solid var(--db-rule);
+  padding: 12px;
+}
+
+.wCardHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.wAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--db-rule);
+  filter: grayscale(30%);
+}
+
+.wAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.wName {
+  font-family: 'Instrument Serif', serif;
+  font-size: 14px;
+  color: var(--db-ink);
+}
+
+.wTime {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+}
+
+.wBadgePending {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--db-warning-bg);
+  color: var(--db-warning);
+  flex-shrink: 0;
+}
+
+.wBadgeAccepted {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--db-success-bg);
+  color: var(--db-success);
+  flex-shrink: 0;
+}
+
+.wBadgeDeclined {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--db-error-bg);
+  color: var(--db-error);
+  flex-shrink: 0;
+}
+
+.wMsg {
+  background: #F0ECE3;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  font-family: 'Instrument Serif', serif;
+  font-size: 12px;
+  color: var(--db-ink);
+  line-height: 1.4;
+}
+
+.wActions {
+  display: flex;
+  gap: 6px;
+}
+
+.wDecline {
+  flex: 1;
+  padding: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: none;
+  border: 1px solid var(--db-rule);
+  color: var(--db-muted);
+  cursor: pointer;
+}
+
+.wAccept {
+  flex: 1;
+  padding: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--db-ink);
+  border: 1px solid var(--db-ink);
+  color: var(--db-bg);
+  cursor: pointer;
+}
+
+/* ── Empty State ──────────────────────────── */
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 32px;
+}
+
+.emptyTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--db-ink);
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.emptyText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--db-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Profile Screen ──────────────────────── */
+
+.profileBody {
+  padding: 0;
+  overflow-y: auto;
+  height: calc(100% - 125px);
+}
+
+.profileHead {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 20px;
+  border-bottom: 3px double var(--db-ink);
+}
+
+.profileAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--db-rule);
+  filter: grayscale(30%);
+  margin-bottom: 12px;
+}
+
+.profileAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profileName {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--db-ink);
+  margin-bottom: 4px;
+}
+
+.profileEmail {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+}
+
+.profileSection {
+  padding: 16px;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+.profileSectionTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+  margin-bottom: 8px;
+}
+
+.profileText {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  line-height: 1.6;
+}
+
+.logoutBtn {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 16px 16px;
+  padding: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: var(--db-error-bg);
+  color: var(--db-error);
+  border: 1px solid var(--db-error);
+  cursor: pointer;
+}

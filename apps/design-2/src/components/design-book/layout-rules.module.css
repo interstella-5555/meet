@@ -1,0 +1,364 @@
+/* ── Layout Rules ─────────────────────────── */
+
+.group {
+  margin-bottom: 48px;
+}
+
+.groupTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-muted);
+  margin-bottom: 20px;
+}
+
+/* ── Spacing Scale ────────────────────────── */
+
+.spacingList {
+  border: 1px solid var(--db-rule);
+  background: var(--db-bg);
+}
+
+.spacingRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+.spacingRow:last-child {
+  border-bottom: none;
+}
+
+.spacingVisual {
+  width: 130px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.spacingBar {
+  height: 8px;
+  background: var(--db-accent);
+  min-width: 4px;
+}
+
+.spacingPx {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-ink);
+  width: 40px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.spacingName {
+  font-family: 'Instrument Serif', serif;
+  font-size: 13px;
+  color: var(--db-ink);
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.spacingUsage {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+}
+
+/* ── Layout Rule Grid ─────────────────────── */
+
+.ruleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.ruleItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.ruleTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 14px;
+  color: var(--db-ink);
+  margin-bottom: 12px;
+}
+
+.ruleDiagram {
+  margin-bottom: 12px;
+}
+
+.ruleDesc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+  line-height: 1.5;
+}
+
+/* Content Margins diagram */
+.marginDemo {
+  display: flex;
+  align-items: stretch;
+  height: 48px;
+  border: 1px solid var(--db-rule);
+}
+
+.marginLine {
+  width: 16px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--db-accent),
+    var(--db-accent) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  opacity: 0.4;
+}
+
+.marginContent {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+  border-left: 1px dashed var(--db-accent);
+  border-right: 1px dashed var(--db-accent);
+}
+
+/* Section Dividers diagram */
+.dividerDemo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dividerLine {
+  padding-bottom: 8px;
+}
+
+.dividerLine span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+}
+
+/* Tab Bar diagram */
+.tabBarDemo {
+  border: 1px solid var(--db-rule);
+  overflow: hidden;
+}
+
+.tabBarBorder {
+  background: var(--db-ink);
+  color: var(--db-bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  padding: 2px 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.tabBarBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+  height: 48px;
+}
+
+.tabBarLabel {
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+/* Snap Points diagram */
+.snapDemo {
+  position: relative;
+  height: 120px;
+  border: 1px solid var(--db-rule);
+  background: var(--db-bg);
+}
+
+.snapLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed var(--db-accent);
+  display: flex;
+  align-items: flex-end;
+  padding: 0 8px 2px;
+}
+
+.snapLine span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  color: var(--db-accent);
+  letter-spacing: 0.5px;
+}
+
+/* ── Motion ───────────────────────────────── */
+
+.motionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.motionItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.motionTitle {
+  font-family: 'Instrument Serif', serif;
+  font-size: 14px;
+  color: var(--db-ink);
+  margin-bottom: 12px;
+}
+
+.motionValues {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.motionValue {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.motionLabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--db-muted);
+}
+
+.motionValue code {
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  color: var(--db-ink);
+}
+
+.motionDesc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--db-muted);
+  line-height: 1.5;
+}
+
+.motionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.motionList li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--db-ink);
+  line-height: 1.8;
+  padding-left: 14px;
+  position: relative;
+}
+
+.motionList li::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  color: var(--db-rule);
+}
+
+/* ── Do / Don't ──────────────────────────── */
+
+.doGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.doItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.dontItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.doHeader {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-success);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--db-success);
+}
+
+.dontHeader {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-error);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--db-error);
+}
+
+.doList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.doList li {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--db-ink);
+  line-height: 1.8;
+  padding-left: 14px;
+  position: relative;
+}
+
+.doList li::before {
+  content: '\2014';
+  position: absolute;
+  left: 0;
+  color: var(--db-rule);
+}
+
+@media (max-width: 900px) {
+  .ruleGrid,
+  .motionGrid,
+  .doGrid {
+    grid-template-columns: 1fr;
+  }
+  .spacingVisual {
+    width: 80px;
+  }
+}

@@ -1,0 +1,85 @@
+/* ── Typography ───────────────────────────── */
+
+.family {
+  margin-bottom: 40px;
+}
+
+.familyHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--db-rule);
+}
+
+.familyName {
+  font-family: 'Instrument Serif', serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--db-ink);
+}
+
+.familyRole {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--db-muted);
+}
+
+.specimens {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.specimen {
+  background: var(--db-bg);
+  padding: 16px 20px;
+  display: flex;
+  gap: 24px;
+  align-items: baseline;
+}
+
+.specMeta {
+  flex-shrink: 0;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.specLabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--db-ink);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.specDetails {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--db-muted);
+  letter-spacing: 0.5px;
+}
+
+.specSample {
+  flex: 1;
+  color: var(--db-ink);
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .specimen {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .specMeta {
+    width: auto;
+  }
+}

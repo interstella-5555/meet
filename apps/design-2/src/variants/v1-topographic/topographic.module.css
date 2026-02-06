@@ -1,0 +1,325 @@
+/* CSS Variables */
+
+.phoneFrame {
+  --green: #2D6A4F;
+  --brown: #9C6644;
+  --water: #118AB2;
+  --sand: #F4F0E8;
+  --ink: #1B1B1B;
+  --contour: #C9BFA8;
+  background: var(--sand);
+  border: 1px solid #D5CDBA;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.statusBar {
+  height: 54px;
+  background: var(--sand);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--brown);
+}
+
+.mapArea {
+  height: 400px;
+  background: #EDE9DD;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Contour lines — the signature element */
+.contourLines {
+  position: absolute;
+  inset: 0;
+}
+.contourLines svg { width: 100%; height: 100%; }
+
+/* Park/green areas */
+.mapGreen {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(45,106,79,0.12);
+  border: 1.5px solid rgba(45,106,79,0.2);
+}
+.green1 { top: 50px; left: 30px; width: 100px; height: 80px; }
+.green2 { top: 200px; left: 200px; width: 130px; height: 100px; border-radius: 40%; }
+
+/* Water feature */
+.mapWater {
+  position: absolute;
+  top: 280px;
+  left: -20px;
+  width: 200px;
+  height: 40px;
+  background: rgba(17,138,178,0.15);
+  border: 1.5px solid rgba(17,138,178,0.25);
+  border-radius: 0 50% 50% 0;
+  transform: rotate(-10deg);
+}
+
+.mapRoad {
+  position: absolute;
+  background: #D8D2C4;
+}
+.roadH { top: 170px; left: 0; right: 0; height: 5px; }
+.roadV { top: 0; bottom: 0; left: 190px; width: 5px; }
+
+/* Topographic markers */
+.marker {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  color: #fff;
+}
+.markerGroup {
+  width: 40px; height: 40px;
+  background: var(--green);
+  border-radius: 50%;
+  top: 110px; left: 140px;
+  font-size: 16px;
+  box-shadow: 0 0 0 3px rgba(45,106,79,0.2), 0 0 0 8px rgba(45,106,79,0.08);
+}
+.markerSmall {
+  width: 32px; height: 32px;
+  background: var(--brown);
+  border-radius: 50%;
+  top: 230px; left: 90px;
+  font-size: 13px;
+  box-shadow: 0 0 0 3px rgba(156,102,68,0.2);
+}
+.markerAvatar {
+  width: 48px; height: 48px;
+  top: 140px; left: 270px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--sand);
+  box-shadow: 0 0 0 2px var(--green), 0 2px 8px rgba(0,0,0,0.15);
+}
+.markerAvatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.myLoc {
+  position: absolute;
+  top: 175px; left: 170px;
+  width: 14px; height: 14px;
+  background: var(--water);
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--water), 0 0 12px rgba(17,138,178,0.3);
+}
+
+/* Elevation label */
+.elevLabel {
+  position: absolute;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--contour);
+  letter-spacing: 1px;
+}
+.elev1 { top: 32px; right: 20px; }
+.elev2 { bottom: 40px; left: 15px; }
+
+/* Radius */
+.radiusBadge {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--sand);
+  border: 1.5px solid var(--contour);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--brown);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+/* Bottom sheet — field notes style */
+.sheet {
+  position: absolute;
+  bottom: 78px;
+  left: 0; right: 0;
+  top: 454px;
+  background: var(--sand);
+  border-top: 2px solid var(--contour);
+  display: flex;
+  flex-direction: column;
+}
+.sheet::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 20px; right: 20px;
+  height: 100%;
+  background: repeating-linear-gradient(transparent, transparent 31px, var(--contour) 31px, var(--contour) 32px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+.sheetHandleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 0;
+  position: relative;
+  z-index: 1;
+}
+.sheetHandle {
+  width: 32px;
+  height: 3px;
+  background: var(--contour);
+  border-radius: 2px;
+}
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 20px 8px;
+  position: relative;
+  z-index: 1;
+}
+.sheetCount {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--brown);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.sheetCount strong {
+  font-size: 20px;
+  color: var(--green);
+  letter-spacing: -1px;
+}
+.sheetAction {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--water);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: none;
+  border: none;
+}
+
+.userList {
+  flex: 1;
+  overflow: hidden;
+  padding: 4px 20px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--contour);
+}
+.userCard :global(.avatar) {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--contour);
+}
+.userCard :global(.avatar) img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.userCard :global(.info) {
+  flex: 1;
+  min-width: 0;
+}
+.userCard :global(.nameRow) {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+.userCard :global(.name) {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.userCard :global(.dist) {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--brown);
+}
+.userCard :global(.tags) {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.userCard :global(.tag) {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.userCard :global(.tag)::before {
+  content: '#';
+  color: var(--contour);
+}
+.match {
+  color: var(--water);
+  font-weight: 700;
+}
+.userCard :global(.waveBtn) {
+  width: 38px;
+  height: 38px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(45,106,79,0.3);
+}
+.userCard :global(.waveBtn) svg { width: 20px; height: 20px; }
+
+.tabs {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 78px;
+  background: var(--sand);
+  border-top: 1.5px solid var(--contour);
+  display: flex;
+  padding-top: 6px;
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 6px;
+}
+.tab svg { width: 22px; height: 22px; }
+.tab span {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--contour);
+}
+.active span { color: var(--green); }
+.tabIcon { color: var(--contour); }
+.active .tabIcon { color: var(--green); }

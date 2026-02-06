@@ -1,0 +1,329 @@
+.phoneFrame {
+  --accent: #FF4800;
+  --accent2: #2B2BFF;
+  --bg: #FFFBF0;
+  --ink: #1A1A1A;
+  --border: 3px solid #1A1A1A;
+  --shadow: 5px 5px 0 #1A1A1A;
+  background: var(--bg);
+  border: 3px solid #1A1A1A;
+  box-shadow: 8px 8px 0 #1A1A1A;
+}
+
+.statusBar {
+  height: 54px;
+  background: var(--bg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.mapArea {
+  height: 390px;
+  background: #E8E4D9;
+  position: relative;
+  overflow: hidden;
+  margin: 0 12px;
+  border: var(--border);
+}
+
+/* Stylized map grid */
+.mapGrid {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, #d5d0c3 39px, #d5d0c3 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, #d5d0c3 39px, #d5d0c3 40px);
+}
+
+.mapBlock {
+  position: absolute;
+  background: #D4CFBF;
+}
+
+.mapBlock1 { top: 60px; left: 40px; width: 100px; height: 70px; }
+.mapBlock2 { top: 180px; left: 160px; width: 140px; height: 50px; }
+.mapBlock3 { top: 80px; left: 240px; width: 60px; height: 120px; }
+
+.mapRoad {
+  position: absolute;
+  background: var(--bg);
+}
+
+.roadH1 { top: 150px; left: 0; right: 0; height: 8px; }
+.roadH2 { top: 260px; left: 0; right: 0; height: 6px; }
+.roadV1 { top: 0; bottom: 0; left: 130px; width: 8px; }
+.roadV2 { top: 0; bottom: 0; left: 280px; width: 6px; }
+
+/* Cluster markers — brutalist style */
+.marker {
+  position: absolute;
+  border: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  color: #fff;
+}
+
+.markerGroup {
+  width: 44px; height: 44px;
+  background: var(--accent);
+  box-shadow: 3px 3px 0 var(--ink);
+  top: 100px; left: 180px;
+  font-size: 18px;
+}
+
+.markerSmall {
+  width: 36px; height: 36px;
+  background: var(--accent2);
+  box-shadow: 3px 3px 0 var(--ink);
+  top: 220px; left: 80px;
+  font-size: 14px;
+}
+
+.markerAvatar {
+  width: 50px; height: 50px;
+  top: 180px; left: 260px;
+  border: var(--border);
+  box-shadow: 3px 3px 0 var(--ink);
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.markerAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* My location */
+.myLoc {
+  position: absolute;
+  top: 165px; left: 155px;
+  width: 18px; height: 18px;
+  background: var(--ink);
+  border: 3px solid var(--bg);
+}
+
+/* Radius badge */
+.radiusBadge {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: var(--bg);
+  border: var(--border);
+  box-shadow: var(--shadow);
+  padding: 6px 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px; height: 8px;
+  background: var(--accent);
+  border: 2px solid var(--ink);
+}
+
+/* Bottom sheet — brutalist card stack */
+.sheet {
+  position: absolute;
+  bottom: 83px;
+  left: 0; right: 0;
+  top: 444px;
+  background: var(--bg);
+  border-top: var(--border);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheetHandleRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0 0;
+}
+
+.sheetHandle {
+  width: 40px;
+  height: 4px;
+  background: var(--ink);
+}
+
+.sheetHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 16px 10px;
+}
+
+.sheetCount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.5px;
+}
+
+.sheetCount span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #888;
+}
+
+.sheetAction {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid var(--accent);
+  padding: 4px 10px;
+  background: none;
+}
+
+.userList {
+  flex: 1;
+  overflow: hidden;
+  padding: 0 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.userCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: var(--border);
+  padding: 10px;
+  background: #fff;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border: var(--border);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.dist {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: #999;
+}
+
+.tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  background: var(--bg);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.match {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.waveBtn {
+  width: 42px;
+  height: 42px;
+  background: var(--accent);
+  border: var(--border);
+  box-shadow: 2px 2px 0 var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.waveBtn svg { width: 22px; height: 22px; }
+
+/* Tab bar */
+.tabs {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 83px;
+  background: var(--bg);
+  border-top: var(--border);
+  display: flex;
+  padding-top: 6px;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 6px;
+}
+
+.tab svg { width: 24px; height: 24px; }
+
+.tab span {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #BBB;
+}
+
+.tab:global(.active) span { color: var(--accent); }
+
+.tabIcon { color: #CCC; }
+
+.tab:global(.active) .tabIcon { color: var(--accent); }

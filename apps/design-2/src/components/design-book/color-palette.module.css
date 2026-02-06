@@ -1,0 +1,129 @@
+/* ── Color Palette ────────────────────────── */
+
+.group {
+  margin-bottom: 40px;
+}
+
+.groupTitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--db-muted);
+  margin-bottom: 16px;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.swatch {
+  background: var(--db-bg);
+  padding: 0;
+}
+
+.swatchColor {
+  height: 72px;
+  width: 100%;
+}
+
+.swatchMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 12px 0;
+}
+
+.swatchName {
+  font-family: 'Instrument Serif', serif;
+  font-size: 14px;
+  color: var(--db-ink);
+}
+
+.swatchHex {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  color: var(--db-muted);
+  letter-spacing: 0.5px;
+}
+
+.swatchDesc {
+  font-size: 10px;
+  color: var(--db-muted);
+  padding: 4px 12px 12px;
+  line-height: 1.4;
+}
+
+/* ── Status Row ──────────────────────────── */
+
+.statusRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--db-rule);
+  border: 1px solid var(--db-rule);
+}
+
+.statusItem {
+  background: var(--db-bg);
+  padding: 20px;
+}
+
+.statusSwatch {
+  margin-bottom: 12px;
+}
+
+.statusBadge {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 2px;
+}
+
+.statusColors {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.statusColorChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--db-muted);
+}
+
+.miniChip {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.chipLabel {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--db-rule);
+}
+
+@media (max-width: 900px) {
+  .swatches {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .statusRow {
+    grid-template-columns: 1fr;
+  }
+}

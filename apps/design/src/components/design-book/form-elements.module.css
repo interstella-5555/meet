@@ -429,6 +429,12 @@
 }
 
 @media (max-width: 600px) {
+  .buttonRow {
+    flex-wrap: wrap;
+  }
+  .stateLabels {
+    flex-wrap: wrap;
+  }
   .inputGrid {
     grid-template-columns: 1fr;
   }

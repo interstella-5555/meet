@@ -8,7 +8,10 @@
     "test": "turbo test",
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
-    "clean": "turbo clean && rm -rf node_modules"
+    "clean": "turbo clean && rm -rf node_modules",
+    "design:dev": "pnpm --filter @meet/design dev",
+    "design:build": "pnpm --filter @meet/design build",
+    "design:preview": "pnpm --filter @meet/design preview"
   },
   "devDependencies": {
     "turbo": "^2.0.0",

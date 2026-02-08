@@ -21,18 +21,18 @@ export const updateLocationSchema = z.object({
 
 // Wave validators
 export const sendWaveSchema = z.object({
-  toUserId: z.string().uuid(),
+  toUserId: z.string().min(1),
   message: z.string().max(200).optional(),
 });
 
 export const respondToWaveSchema = z.object({
-  waveId: z.string().uuid(),
+  waveId: z.string().min(1),
   accept: z.boolean(),
 });
 
 // Message validators
 export const sendMessageSchema = z.object({
-  conversationId: z.string().uuid(),
+  conversationId: z.string().min(1),
   content: z.string().min(1).max(2000),
 });
 

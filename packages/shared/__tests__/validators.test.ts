@@ -82,9 +82,9 @@ describe('sendWaveSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('rejects invalid UUID', () => {
+  it('rejects empty toUserId', () => {
     const result = sendWaveSchema.safeParse({
-      toUserId: 'not-a-uuid',
+      toUserId: '',
     });
 
     expect(result.success).toBe(false);

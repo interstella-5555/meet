@@ -1,9 +1,11 @@
 import {
   View,
   Text,
+  Animated,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
+import { useRef, useEffect } from 'react';
 import { colors, fonts, spacing } from '../../theme';
 import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
@@ -35,6 +37,29 @@ export function UserRow({
   isWaving,
   onWave,
 }: UserRowProps) {
+  const scale = useRef(new Animated.Value(1)).current;
+  const prevHasWaved = useRef(hasWaved);
+
+  useEffect(() => {
+    if (hasWaved && !prevHasWaved.current) {
+      Animated.sequence([
+        Animated.spring(scale, {
+          toValue: 1.4,
+          useNativeDriver: true,
+          speed: 50,
+          bounciness: 12,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          useNativeDriver: true,
+          speed: 30,
+          bounciness: 8,
+        }),
+      ]).start();
+    }
+    prevHasWaved.current = hasWaved;
+  }, [hasWaved]);
+
   return (
     <View style={styles.row}>
       <Avatar uri={avatarUrl} name={displayName} size={40} />
@@ -44,19 +69,21 @@ export function UserRow({
         </Text>
         <Text style={styles.distance}>{formatDistance(distance)}</Text>
       </View>
-      <Button
-        variant="wave"
-        onPress={onWave}
-        disabled={hasWaved || isWaving}
-      >
-        {isWaving ? (
-          <ActivityIndicator size="small" color={colors.ink} />
-        ) : hasWaved ? (
-          <IconCheck size={16} color={colors.ink} />
-        ) : (
-          <IconWave size={16} color={colors.ink} />
-        )}
-      </Button>
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <Button
+          variant="wave"
+          onPress={onWave}
+          disabled={hasWaved || isWaving}
+        >
+          {isWaving ? (
+            <ActivityIndicator size="small" color={colors.ink} />
+          ) : hasWaved ? (
+            <IconCheck size={16} color={colors.ink} />
+          ) : (
+            <IconWave size={16} color={colors.ink} />
+          )}
+        </Button>
+      </Animated.View>
     </View>
   );
 }
@@ -67,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: spacing.compact,
     paddingHorizontal: spacing.column,
-    borderBottomWidth: 1,
+    borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.rule,
   },
   info: {

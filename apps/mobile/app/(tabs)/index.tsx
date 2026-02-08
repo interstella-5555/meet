@@ -40,6 +40,7 @@ export default function NearbyScreen() {
   const sheetRef = useRef<BottomSheetRef>(null);
   const mapRef = useRef<NearbyMapRef>(null);
 
+  const utils = trpc.useUtils();
   const updateLocationMutation = trpc.profiles.updateLocation.useMutation();
   const sendWaveMutation = trpc.waves.send.useMutation();
 
@@ -113,14 +114,24 @@ export default function NearbyScreen() {
         longitude: location.coords.longitude,
       });
     } catch (error) {
-      console.error('Error getting location:', error);
-      setPermissionStatus('denied');
+      console.warn('Error getting location:', error);
+      if (__DEV__) {
+        // Fallback: centrum Warszawy w symulatorze
+        const fallbackLat = 52.2297;
+        const fallbackLng = 21.0122;
+        setLocation(fallbackLat, fallbackLng);
+        await updateLocationMutation.mutateAsync({
+          latitude: fallbackLat,
+          longitude: fallbackLng,
+        });
+      } else {
+        setPermissionStatus('denied');
+      }
     }
   };
 
   const handleWave = async (userId: string, displayName: string) => {
     if (wavedUsers.has(userId)) {
-      Alert.alert('Już zaczepiono', `Już wysłałeś zaczepienie do ${displayName}`);
       return;
     }
 
@@ -128,11 +139,10 @@ export default function NearbyScreen() {
     try {
       await sendWaveMutation.mutateAsync({ toUserId: userId });
       setWavedUsers((prev) => new Set([...prev, userId]));
-      Alert.alert('Wysłano!', `Zaczepienie wysłane do ${displayName}`);
+      utils.waves.getSent.invalidate();
     } catch (error: any) {
       const errorMsg = error.message || error.toString();
       if (errorMsg.includes('already waved')) {
-        Alert.alert('Już zaczepiono', `Już wysłałeś zaczepienie do ${displayName}`);
         setWavedUsers((prev) => new Set([...prev, userId]));
       } else {
         Alert.alert('Błąd', `Nie udało się wysłać zaczepienia: ${errorMsg}`);

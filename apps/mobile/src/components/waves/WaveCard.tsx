@@ -21,7 +21,6 @@ interface Wave {
   id: string;
   fromUserId: string;
   toUserId: string;
-  message: string | null;
   status: 'pending' | 'accepted' | 'declined';
   createdAt: string;
 }
@@ -74,12 +73,6 @@ export function WaveCard({
         </View>
         {!isReceived && <StatusBadge status={wave.status} />}
       </View>
-
-      {wave.message && (
-        <View style={styles.messageContainer}>
-          <Text style={styles.message}>{wave.message}</Text>
-        </View>
-      )}
 
       {profile.bio && (
         <Text style={styles.bio} numberOfLines={2}>
@@ -138,17 +131,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.muted,
     marginTop: 2,
-  },
-  messageContainer: {
-    borderLeftWidth: 2,
-    borderLeftColor: colors.rule,
-    paddingLeft: spacing.gutter,
-    marginBottom: spacing.gutter,
-  },
-  message: {
-    fontFamily: fonts.serifItalic,
-    fontSize: 14,
-    color: colors.ink,
   },
   bio: {
     fontFamily: fonts.sans,

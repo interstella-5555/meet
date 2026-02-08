@@ -105,7 +105,6 @@ export const waves = pgTable(
     toUserId: text('to_user_id')
       .notNull()
       .references(() => user.id),
-    message: text('message'),
     status: varchar('status', { length: 20 }).notNull().default('pending'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
   },

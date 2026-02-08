@@ -47,7 +47,7 @@ cd packages/dev-cli && bun run src/cli.ts
 |---------|-------------|
 | `create-user <name>` | Create user + profile + location (auto-login) |
 | `users` | List users created this session |
-| `send-wave <from> <to> [msg]` | Send a wave |
+| `send-wave --from <email> --to <email>` | Send a wave |
 | `waves <name>` | Show received & sent waves |
 | `respond-wave <name> <waveId> accept\|decline` | Accept or decline a wave |
 | `chats <name>` | List conversations |

@@ -23,7 +23,6 @@ export const updateLocationSchema = z.object({
 // Wave validators
 export const sendWaveSchema = z.object({
   toUserId: z.string().min(1),
-  message: z.string().max(200).optional(),
 });
 
 export const respondToWaveSchema = z.object({

@@ -101,13 +101,11 @@ program
   .description("Send a wave")
   .requiredOption("--from <email>", "sender email")
   .requiredOption("--to <email>", "recipient email")
-  .argument("[message]", "optional wave message")
-  .action(async (message: string | undefined, opts: { from: string; to: string }) => {
+  .action(async (opts: { from: string; to: string }) => {
     const from = await resolveUser(opts.from);
     const to = await resolveUser(opts.to);
     const wave = await trpc("waves.send", from.token, {
       toUserId: to.userId,
-      ...(message ? { message } : {}),
     });
     console.log(`  ✓ Wave sent  id=${wave.id}`);
   });
@@ -126,7 +124,7 @@ program
     for (const r of received) {
       const from = r.fromProfile?.displayName ?? r.wave?.fromUserId;
       console.log(
-        `    id=${r.wave.id}  from=${from}  msg=${r.wave.message ?? "—"}  status=${r.wave.status}`
+        `    id=${r.wave.id}  from=${from}  status=${r.wave.status}`
       );
     }
 
@@ -134,7 +132,7 @@ program
     for (const s of sent) {
       const to = s.toProfile?.displayName ?? s.wave?.toUserId;
       console.log(
-        `    id=${s.wave.id}  to=${to}  msg=${s.wave.message ?? "—"}  status=${s.wave.status}`
+        `    id=${s.wave.id}  to=${to}  status=${s.wave.status}`
       );
     }
   });

@@ -84,7 +84,6 @@ export const wavesRouter = router({
         .values({
           fromUserId: ctx.userId,
           toUserId: input.toUserId,
-          message: input.message,
         })
         .returning();
 

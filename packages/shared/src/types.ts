@@ -24,7 +24,6 @@ export interface Wave {
   id: string;
   fromUserId: string;
   toUserId: string;
-  message: string | null;
   status: WaveStatus;
   createdAt: Date;
 }

@@ -113,7 +113,7 @@ blisko/
 | `account` | Auth providers (Better Auth managed) |
 | `verification` | Email verification tokens |
 | `profiles` | Display name, bio, lookingFor, avatar URL, embedding, location |
-| `waves` | Wave requests (from → to, message, status) |
+| `waves` | Wave requests (from → to, status) |
 | `conversations` | Chat conversations |
 | `conversationParticipants` | Conversation membership |
 | `messages` | Chat messages |

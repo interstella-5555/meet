@@ -45,3 +45,6 @@ coverage/
 
 # Metro
 .metro-health-check*
+
+# Seed cache
+apps/api/scripts/.seed-cache.json

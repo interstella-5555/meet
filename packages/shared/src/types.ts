@@ -12,6 +12,8 @@ export interface Profile {
   avatarUrl: string | null;
   bio: string;
   lookingFor: string;
+  socialProfile: string | null;
+  interests: string[] | null;
   embedding: number[] | null;
   latitude: number | null;
   longitude: number | null;

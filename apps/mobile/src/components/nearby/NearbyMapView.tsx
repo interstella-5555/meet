@@ -16,6 +16,8 @@ export interface MapUser {
   gridLat: number;
   gridLng: number;
   gridId: string;
+  rankScore: number;
+  commonInterests: string[];
 }
 
 export interface GridCluster {

@@ -16,6 +16,10 @@ export default function ModalsLayout() {
         name="edit-profile"
         options={{ title: 'Edytuj profil' }}
       />
+      <Stack.Screen
+        name="user/[userId]"
+        options={{ title: 'Profil' }}
+      />
     </Stack>
   );
 }

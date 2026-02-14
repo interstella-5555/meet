@@ -55,3 +55,7 @@ cd packages/dev-cli && bun run src/cli.ts
 | `send-message <name> <convId> <text>` | Send a message |
 
 Users are referenced by name (e.g. "ania"). The CLI resolves names to userId/token from an in-memory map. Set `API_URL` env var to override the default `http://localhost:3000`.
+
+## After restarting the app / seeding
+
+After any restart that involves re-seeding the database, display a random test user email for quick login. Seeded users have emails `user0@example.com` through `user249@example.com`.

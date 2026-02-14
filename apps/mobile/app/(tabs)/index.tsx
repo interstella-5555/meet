@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import * as Location from 'expo-location';
+import { router } from 'expo-router';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useLocationStore } from '../../src/stores/locationStore';
 import { trpc } from '../../src/lib/trpc';
@@ -43,24 +44,10 @@ export default function NearbyScreen() {
   const updateLocationMutation = trpc.profiles.updateLocation.useMutation();
   const sendWaveMutation = trpc.waves.send.useMutation();
 
-  // Pre-fetch nearby users list (with similarity scores) for future use
-  trpc.profiles.getNearbyUsers.useQuery(
-    {
-      latitude: latitude!,
-      longitude: longitude!,
-      radiusMeters: 5000,
-      limit: 50,
-    },
-    {
-      enabled: !!latitude && !!longitude,
-      staleTime: 30000,
-      placeholderData: keepPreviousData,
-    }
-  );
-
   const {
     data: mapUsers,
     isLoading: isLoadingMap,
+    isRefetching: isRefetchingMap,
     refetch: refetchMap,
   } = trpc.profiles.getNearbyUsersForMap.useQuery(
     {
@@ -78,6 +65,28 @@ export default function NearbyScreen() {
 
   // Fetch sent waves
   const { data: sentWaves } = trpc.waves.getSent.useQuery();
+
+  // Users to display in sheet: filtered by cluster or all
+  const displayUsers = useMemo(() => {
+    if (selectedCluster) {
+      return selectedCluster.users;
+    }
+    return (mapUsers as MapUser[]) || [];
+  }, [selectedCluster, mapUsers]);
+
+  // Connection snippets for visible users (async LLM layer)
+  const userIds = useMemo(
+    () => displayUsers.map((u) => u.profile.userId),
+    [displayUsers]
+  );
+
+  const { data: snippets } = trpc.profiles.getConnectionSnippets.useQuery(
+    { userIds },
+    {
+      enabled: userIds.length > 0,
+      staleTime: 300_000, // 5min — DB cache handles invalidation
+    }
+  );
 
   useEffect(() => {
     if (sentWaves) {
@@ -160,6 +169,10 @@ export default function NearbyScreen() {
     setSelectedCluster(null);
   }, []);
 
+  const handleRefresh = useCallback(() => {
+    refetchMap();
+  }, [refetchMap]);
+
   const toggleMap = useCallback(() => {
     const toValue = mapExpanded ? 0 : MAP_EXPANDED_HEIGHT;
     Animated.spring(mapHeight, {
@@ -168,15 +181,6 @@ export default function NearbyScreen() {
     }).start();
     setMapExpanded((v) => !v);
   }, [mapExpanded, mapHeight]);
-
-  // Users to display in sheet: filtered by cluster or all
-  const displayUsers = useMemo(() => {
-    if (selectedCluster) {
-      return selectedCluster.users;
-    }
-    // Show all map users (they have grid positions + distance)
-    return (mapUsers as MapUser[]) || [];
-  }, [selectedCluster, mapUsers]);
 
   const totalCount = (mapUsers as MapUser[])?.length ?? 0;
   const displayCount = displayUsers.length;
@@ -268,9 +272,25 @@ export default function NearbyScreen() {
             displayName={item.profile.displayName}
             avatarUrl={item.profile.avatarUrl}
             distance={item.distance}
+            bio={item.profile.bio}
+            rankScore={item.rankScore}
+            commonInterests={item.commonInterests}
+            connectionSnippet={snippets?.[item.profile.userId]}
             hasWaved={wavedUsers.has(item.profile.userId)}
             isWaving={wavingAt === item.profile.userId}
             onWave={() => handleWave(item.profile.userId, item.profile.displayName)}
+            onPress={() =>
+              router.push({
+                pathname: '/(modals)/user/[userId]',
+                params: {
+                  userId: item.profile.userId,
+                  distance: String(item.distance),
+                  rankScore: String(item.rankScore),
+                  commonInterests: JSON.stringify(item.commonInterests),
+                  displayName: item.profile.displayName,
+                },
+              })
+            }
           />
         )}
         ListEmptyComponent={
@@ -278,6 +298,8 @@ export default function NearbyScreen() {
             <Text style={styles.emptyListText}>Nikogo w pobliżu</Text>
           </View>
         }
+        onRefresh={handleRefresh}
+        refreshing={isRefetchingMap}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
       />

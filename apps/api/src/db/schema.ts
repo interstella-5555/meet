@@ -78,6 +78,8 @@ export const profiles = pgTable(
     bio: text('bio').notNull(),
     lookingFor: text('looking_for').notNull(),
     isHidden: boolean('is_hidden').default(false).notNull(),
+    socialProfile: text('social_profile'),
+    interests: text('interests').array(),
     embedding: real('embedding').array(),
     latitude: real('latitude'),
     longitude: real('longitude'),
@@ -226,6 +228,27 @@ export const pushTokens = pgTable(
   },
   (table) => ({
     userIdx: index('push_tokens_user_idx').on(table.userId),
+  })
+);
+
+// Connection snippets (cached LLM-generated descriptions of what connects two users)
+export const connectionSnippets = pgTable(
+  'connection_snippets',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    userAId: text('user_a_id')
+      .notNull()
+      .references(() => user.id),
+    userBId: text('user_b_id')
+      .notNull()
+      .references(() => user.id),
+    snippet: text('snippet').notNull(),
+    profileHashA: text('profile_hash_a').notNull(),
+    profileHashB: text('profile_hash_b').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  },
+  (table) => ({
+    pairIdx: index('cs_pair_idx').on(table.userAId, table.userBId),
   })
 );
 

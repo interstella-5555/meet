@@ -48,3 +48,6 @@ coverage/
 
 # Seed cache
 apps/api/scripts/.seed-cache.json
+
+# Worktrees
+.worktrees/

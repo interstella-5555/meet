@@ -58,3 +58,18 @@ export interface AnalysisReadyEvent {
   aboutUserId: string;
   shortSnippet: string;
 }
+
+export interface ProfileReadyEvent {
+  userId: string;
+}
+
+export interface QuestionReadyEvent {
+  userId: string;
+  sessionId: string;
+  questionNumber: number;
+}
+
+export interface ProfilingCompleteEvent {
+  userId: string;
+  sessionId: string;
+}

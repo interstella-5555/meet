@@ -12,7 +12,10 @@ type WSMessage =
   | { type: 'reaction'; conversationId: string; messageId: string; emoji: string; userId: string; action: 'added' | 'removed' }
   | { type: 'newWave'; wave: any }
   | { type: 'waveResponded'; waveId: string; accepted: boolean; conversationId: string | null }
-  | { type: 'analysisReady'; aboutUserId: string; shortSnippet: string };
+  | { type: 'analysisReady'; aboutUserId: string; shortSnippet: string }
+  | { type: 'profileReady' }
+  | { type: 'questionReady'; sessionId: string; questionNumber: number }
+  | { type: 'profilingComplete'; sessionId: string };
 
 type MessageHandler = (msg: WSMessage) => void;
 

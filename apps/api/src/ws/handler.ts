@@ -3,7 +3,7 @@ import { eq, and, gt } from 'drizzle-orm';
 import { db } from '../db';
 import { session as sessionTable, conversationParticipants } from '../db/schema';
 import { ee } from './events';
-import type { NewMessageEvent, TypingEvent, ReactionEvent, NewWaveEvent, WaveRespondedEvent } from './events';
+import type { NewMessageEvent, TypingEvent, ReactionEvent, NewWaveEvent, WaveRespondedEvent, AnalysisReadyEvent } from './events';
 
 interface WSData {
   userId: string | null;
@@ -146,6 +146,14 @@ ee.on('waveResponded', (event: WaveRespondedEvent) => {
     waveId: event.waveId,
     accepted: event.accepted,
     conversationId: event.conversationId,
+  });
+});
+
+ee.on('analysisReady', (event: AnalysisReadyEvent) => {
+  broadcastToUser(event.forUserId, {
+    type: 'analysisReady',
+    aboutUserId: event.aboutUserId,
+    shortSnippet: event.shortSnippet,
   });
 });
 

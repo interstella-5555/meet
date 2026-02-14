@@ -11,7 +11,8 @@ type WSMessage =
   | { type: 'typing'; conversationId: string; userId: string; isTyping: boolean }
   | { type: 'reaction'; conversationId: string; messageId: string; emoji: string; userId: string; action: 'added' | 'removed' }
   | { type: 'newWave'; wave: any }
-  | { type: 'waveResponded'; waveId: string; accepted: boolean; conversationId: string | null };
+  | { type: 'waveResponded'; waveId: string; accepted: boolean; conversationId: string | null }
+  | { type: 'analysisReady'; aboutUserId: string; shortSnippet: string };
 
 type MessageHandler = (msg: WSMessage) => void;
 

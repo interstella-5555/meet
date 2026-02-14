@@ -52,3 +52,9 @@ export interface WaveRespondedEvent {
   accepted: boolean;
   conversationId: string | null;
 }
+
+export interface AnalysisReadyEvent {
+  forUserId: string;
+  aboutUserId: string;
+  shortSnippet: string;
+}

@@ -10,6 +10,7 @@ import {
   Pressable,
 } from 'react-native';
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useWebSocket } from '../../src/lib/ws';
 import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { keepPreviousData } from '@tanstack/react-query';
@@ -41,6 +42,14 @@ export default function NearbyScreen() {
   const mapRef = useRef<NearbyMapRef>(null);
 
   const utils = trpc.useUtils();
+
+  const wsHandler = useCallback((msg: any) => {
+    if (msg.type === 'analysisReady') {
+      utils.profiles.getNearbyUsersForMap.invalidate();
+    }
+  }, []);
+  useWebSocket(wsHandler);
+
   const updateLocationMutation = trpc.profiles.updateLocation.useMutation();
   const sendWaveMutation = trpc.waves.send.useMutation();
 

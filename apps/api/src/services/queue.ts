@@ -4,6 +4,7 @@ import { eq, and, ne, sql } from 'drizzle-orm';
 import { db } from '../db';
 import { profiles, connectionAnalyses, blocks } from '../db/schema';
 import { analyzeConnection } from './ai';
+import { ee } from '../ws/events';
 
 function getConnectionConfig() {
   const url = new URL(process.env.REDIS_URL!);
@@ -127,6 +128,12 @@ async function processAnalyzePair(userAId: string, userBId: string) {
     });
   }
 
+  ee.emit('analysisReady', {
+    forUserId: userAId,
+    aboutUserId: userBId,
+    shortSnippet: result.snippetForA,
+  });
+
   // Upsert B→A
   const [existingBA] = await db
     .select()
@@ -163,6 +170,12 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       updatedAt: now,
     });
   }
+
+  ee.emit('analysisReady', {
+    forUserId: userBId,
+    aboutUserId: userAId,
+    shortSnippet: result.snippetForB,
+  });
 }
 
 async function processAnalyzeUserPairs(

@@ -211,13 +211,6 @@ Szuka: ${profileB.lookingFor}
     return object;
   } catch (error) {
     console.error('Error analyzing connection:', error);
-    return {
-      matchScoreForA: 0,
-      matchScoreForB: 0,
-      snippetForA: '',
-      snippetForB: '',
-      descriptionForA: '',
-      descriptionForB: '',
-    };
+    throw error;
   }
 }

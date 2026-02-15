@@ -69,7 +69,7 @@ function formatEvent(event: any): string {
   if (event.from) parts.push(`← ${event.from}`);
   if (event.matchScore) parts.push(`match:${event.matchScore}`);
   if (event.probability) parts.push(`prob:${event.probability}`);
-  if (event.delay) parts.push(`in ${event.delay}`);
+  if (event.delay) parts.push(`scheduled response in ${event.delay}`);
   if (event.reason) parts.push(`(${event.reason})`);
   if (event.message) parts.push(`"${event.message}"`);
   if (event.error) parts.push(`ERROR: ${event.error}`);

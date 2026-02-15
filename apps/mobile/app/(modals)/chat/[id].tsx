@@ -17,6 +17,7 @@ import { MessageBubble, type BubblePosition } from '../../../src/components/chat
 import { ChatInput } from '../../../src/components/chat/ChatInput';
 import { ReactionPicker } from '../../../src/components/chat/ReactionPicker';
 import { useWebSocket, useTypingIndicator } from '../../../src/lib/ws';
+import { useChatStore } from '../../../src/stores/chatStore';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import { Avatar } from '../../../src/components/ui/Avatar';
@@ -147,6 +148,15 @@ export default function ChatScreen() {
       markAsRead.mutate({ conversationId });
     }
   }, [conversationId]);
+
+  // Track active conversation for notification filtering
+  const setActiveConversation = useChatStore((s) => s.setActiveConversation);
+  useEffect(() => {
+    if (conversationId) {
+      setActiveConversation(conversationId);
+    }
+    return () => setActiveConversation(null);
+  }, [conversationId, setActiveConversation]);
 
   // Send message with optimistic update
   const sendMessage = trpc.messages.send.useMutation({

@@ -92,7 +92,19 @@ export const wavesRouter = router({
 
       await promotePairAnalysis(ctx.userId, input.toUserId);
 
-      ee.emit('newWave', { toUserId: input.toUserId, wave });
+      // Query sender profile for notification display
+      const [senderProfile] = await db
+        .select({ displayName: profiles.displayName, avatarUrl: profiles.avatarUrl })
+        .from(profiles)
+        .where(eq(profiles.userId, ctx.userId));
+
+      ee.emit('newWave', {
+        toUserId: input.toUserId,
+        wave,
+        fromProfile: senderProfile
+          ? { displayName: senderProfile.displayName, avatarUrl: senderProfile.avatarUrl }
+          : { displayName: 'Ktoś', avatarUrl: null },
+      });
 
       return wave;
     }),
@@ -212,11 +224,20 @@ export const wavesRouter = router({
 
         // TODO: Send push notification about accepted wave
 
+        // Query responder profile for notification display
+        const [responderProfile] = await db
+          .select({ displayName: profiles.displayName, avatarUrl: profiles.avatarUrl })
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.userId));
+
         ee.emit('waveResponded', {
           fromUserId: wave.fromUserId,
           waveId: wave.id,
           accepted: true,
           conversationId: conversation.id,
+          responderProfile: responderProfile
+            ? { displayName: responderProfile.displayName, avatarUrl: responderProfile.avatarUrl }
+            : { displayName: 'Ktoś', avatarUrl: null },
         });
 
         return { wave: updatedWave, conversationId: conversation.id };
@@ -227,6 +248,7 @@ export const wavesRouter = router({
         waveId: wave.id,
         accepted: false,
         conversationId: null,
+        responderProfile: { displayName: '', avatarUrl: null },
       });
 
       return { wave: updatedWave, conversationId: null };

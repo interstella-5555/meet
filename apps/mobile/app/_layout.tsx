@@ -8,6 +8,7 @@ import { trpc, trpcClient } from '../src/lib/trpc';
 import { useAuthStore } from '../src/stores/authStore';
 import { authClient } from '../src/lib/auth';
 import { useWebSocket } from '../src/lib/ws';
+import { NotificationProvider } from '../src/providers/NotificationProvider';
 import { colors } from '../src/theme';
 
 const queryClient = new QueryClient();
@@ -66,13 +67,15 @@ export default function RootLayout() {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
-          <Stack.Screen name="(auth)" />
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="onboarding" />
-          <Stack.Screen name="(modals)" options={{ presentation: 'modal' }} />
-        </Stack>
+        <NotificationProvider>
+          <StatusBar style="dark" />
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
+            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="onboarding" />
+            <Stack.Screen name="(modals)" options={{ presentation: 'modal' }} />
+          </Stack>
+        </NotificationProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );

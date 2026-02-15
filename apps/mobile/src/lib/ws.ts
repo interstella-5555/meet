@@ -4,14 +4,14 @@ import { useAuthStore } from '../stores/authStore';
 import { authClient } from './auth';
 import * as SecureStore from 'expo-secure-store';
 
-type WSMessage =
+export type WSMessage =
   | { type: 'auth'; status: 'ok'; conversationIds: string[] }
   | { type: 'auth'; status: 'error'; message: string }
   | { type: 'newMessage'; conversationId: string; message: any }
   | { type: 'typing'; conversationId: string; userId: string; isTyping: boolean }
   | { type: 'reaction'; conversationId: string; messageId: string; emoji: string; userId: string; action: 'added' | 'removed' }
-  | { type: 'newWave'; wave: any }
-  | { type: 'waveResponded'; waveId: string; accepted: boolean; conversationId: string | null }
+  | { type: 'newWave'; wave: any; fromProfile: { displayName: string; avatarUrl: string | null } }
+  | { type: 'waveResponded'; waveId: string; accepted: boolean; conversationId: string | null; responderProfile: { displayName: string; avatarUrl: string | null } }
   | { type: 'analysisReady'; aboutUserId: string; shortSnippet: string }
   | { type: 'nearbyChanged' }
   | { type: 'profileReady' }

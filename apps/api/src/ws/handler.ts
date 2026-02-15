@@ -137,6 +137,7 @@ ee.on('newWave', (event: NewWaveEvent) => {
   broadcastToUser(event.toUserId, {
     type: 'newWave',
     wave: event.wave,
+    fromProfile: event.fromProfile,
   });
 });
 
@@ -146,6 +147,7 @@ ee.on('waveResponded', (event: WaveRespondedEvent) => {
     waveId: event.waveId,
     accepted: event.accepted,
     conversationId: event.conversationId,
+    responderProfile: event.responderProfile,
   });
 });
 

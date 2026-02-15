@@ -464,11 +464,15 @@ async function pollMessages() {
         .innerJoin(user, eq(conversationParticipants.userId, user.id))
         .where(eq(conversationParticipants.conversationId, convId));
 
-      const seedParticipant = participants.find((p) => isSeedEmail(p.email));
-      if (!seedParticipant) {
+      const seedParticipants = participants.filter((p) => isSeedEmail(p.email));
+      if (seedParticipants.length === 0) {
         console.log(`[bot] pollMessages: no seed participant in conv ${convId.slice(0, 8)}, emails: ${participants.map((p) => p.email).join(', ')}`);
         continue;
       }
+
+      // Find the seed user who did NOT send the new message — that's the bot
+      const senderIds = new Set(newMessages.filter((m) => m.conversationId === convId).map((m) => m.senderId));
+      const seedParticipant = seedParticipants.find((p) => !senderIds.has(p.userId)) ?? seedParticipants[0];
 
       const convMessages = newMessages.filter(
         (m) => m.conversationId === convId && m.senderId !== seedParticipant.userId,

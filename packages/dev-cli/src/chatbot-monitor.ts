@@ -48,6 +48,9 @@ const EVENT_STYLES: Record<string, { icon: string; color: string }> = {
   reply_sent:         { icon: "💬", color: "\x1b[32m" },   // green
   reply_skip:         { icon: "🤐", color: "\x1b[33m" },   // yellow
   reply_error:        { icon: "💥", color: "\x1b[31m" },   // red
+  wave_waiting:       { icon: "⏳", color: "\x1b[33m" },   // yellow
+  wave_match_ready:   { icon: "🎯", color: "\x1b[32m" },   // green
+  wave_match_timeout: { icon: "⏰", color: "\x1b[31m" },   // red
 };
 
 const RESET = "\x1b[0m";

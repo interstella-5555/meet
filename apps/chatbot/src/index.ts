@@ -44,6 +44,35 @@ if (process.env.REDIS_URL) {
   console.log('[bot] Events: REDIS_URL not set, events disabled');
 }
 
+// ── Analysis-ready subscription ─────────────────────────────────────
+
+const MATCH_WAIT_TIMEOUT = 60_000; // 60s max wait for analysis
+
+/** Waves waiting for match score: key = `${fromUserId}-${toUserId}` */
+const wavesWaitingForMatch = new Map<string, {
+  wave: { id: string; fromUserId: string; toUserId: string };
+  resolve: () => void;
+  timer: Timer;
+}>();
+
+if (process.env.REDIS_URL) {
+  const analysisSub = new Bun.RedisClient(process.env.REDIS_URL);
+  analysisSub.subscribe('analysis:ready', (message: string) => {
+    try {
+      const event = JSON.parse(message);
+      // Check both directions — we need the recipient's view
+      const key1 = `${event.aboutUserId}-${event.forUserId}`;
+      const key2 = `${event.forUserId}-${event.aboutUserId}`;
+      for (const key of [key1, key2]) {
+        const waiting = wavesWaitingForMatch.get(key);
+        if (waiting) {
+          waiting.resolve();
+        }
+      }
+    } catch {}
+  });
+}
+
 // ── State ────────────────────────────────────────────────────────────
 
 let lastWaveCheck = new Date();
@@ -195,7 +224,38 @@ async function handleWave(wave: {
     const { token } = await getToken(seedUser.email);
 
     // Match-based acceptance
-    const matchScore = await getMatchScore(wave.fromUserId, wave.toUserId);
+    let matchScore = await getMatchScore(wave.fromUserId, wave.toUserId);
+
+    // If no match score yet, wait for analysis to complete
+    if (matchScore === null) {
+      const waitKey = `${wave.fromUserId}-${wave.toUserId}`;
+      emit({ type: 'wave_waiting', bot: botName, from: fromName, reason: 'waiting for match score' });
+
+      const gotScore = await new Promise<boolean>((resolve) => {
+        const timer = setTimeout(() => {
+          wavesWaitingForMatch.delete(waitKey);
+          resolve(false);
+        }, MATCH_WAIT_TIMEOUT);
+
+        wavesWaitingForMatch.set(waitKey, {
+          wave,
+          resolve: () => {
+            clearTimeout(timer);
+            wavesWaitingForMatch.delete(waitKey);
+            resolve(true);
+          },
+          timer,
+        });
+      });
+
+      if (gotScore) {
+        matchScore = await getMatchScore(wave.fromUserId, wave.toUserId);
+        emit({ type: 'wave_match_ready', bot: botName, from: fromName, matchScore: matchScore !== null ? `${matchScore.toFixed(0)}%` : null });
+      } else {
+        emit({ type: 'wave_match_timeout', bot: botName, from: fromName, reason: `no score after ${MATCH_WAIT_TIMEOUT / 1000}s` });
+      }
+    }
+
     const { accept, probability: acceptProb } = shouldAcceptWave(matchScore);
     const scoreStr = matchScore !== null ? `${matchScore.toFixed(0)}%` : null;
 

@@ -15,6 +15,7 @@ interface UserRowProps {
   // Nearby-only (optional)
   distance?: number;
   rankScore?: number;
+  matchScore?: number;
   commonInterests?: string[];
   shortSnippet?: string | null;
   analysisReady?: boolean;
@@ -84,6 +85,7 @@ export function UserRow({
   distance,
   bio,
   rankScore,
+  matchScore,
   commonInterests,
   shortSnippet,
   analysisReady,
@@ -95,7 +97,7 @@ export function UserRow({
   const { text: snippet, isAnalyzing } = hasNearbyData
     ? getSnippetText(shortSnippet ?? null, analysisReady ?? false, commonInterests ?? [], bio)
     : { text: bio || null, isAnalyzing: false };
-  const matchPercent = Math.round((rankScore ?? 0) * 100);
+  const matchPercent = matchScore ?? Math.round((rankScore ?? 0) * 100);
   const isHighlight = !!shortSnippet || (commonInterests ?? []).length > 0;
 
   return (

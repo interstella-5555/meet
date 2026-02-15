@@ -9,9 +9,10 @@ const API = process.env.API_URL || 'http://localhost:3000';
 const USER_COUNT = 250;
 const CACHE_PATH = `${import.meta.dir}/.seed-cache.json`;
 
-// Warsaw center + neighborhoods bounding box
-const WARSAW_CENTER = { lat: 52.2297, lng: 21.0122 };
-const SPREAD = 0.035; // ~3.5km radius
+// Ochota / Włochy / Wola / Śródmieście / Mokotów
+const WARSAW_CENTER = { lat: 52.22, lng: 20.99 };
+const SPREAD_LAT = 0.05;
+const SPREAD_LNG = 0.07;
 
 function randomInRange(center: number, spread: number) {
   return center + (Math.random() - 0.5) * 2 * spread;
@@ -484,8 +485,8 @@ async function main() {
       const email = `user${idx}@example.com`;
       const bio = generateBio(female);
       const lookingFor = generateLookingFor();
-      const lat = randomInRange(WARSAW_CENTER.lat, SPREAD);
-      const lng = randomInRange(WARSAW_CENTER.lng, SPREAD);
+      const lat = randomInRange(WARSAW_CENTER.lat, SPREAD_LAT);
+      const lng = randomInRange(WARSAW_CENTER.lng, SPREAD_LNG);
       const interests = await generateInterestsFromBio(bio, lookingFor);
 
       seedData.push({ name, email, bio, lookingFor, lat, lng, interests });

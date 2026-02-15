@@ -185,8 +185,9 @@ export default function NearbyScreen() {
 
   const handleRefresh = useCallback(() => {
     setIsManualRefresh(true);
-    refetchList().finally(() => setIsManualRefresh(false));
-  }, [refetchList]);
+    utils.profiles.getNearbyUsersForMap.invalidate()
+      .finally(() => setIsManualRefresh(false));
+  }, [utils]);
 
   const toggleMap = useCallback(() => {
     const toValue = mapExpanded ? 0 : MAP_EXPANDED_HEIGHT;
@@ -298,6 +299,7 @@ export default function NearbyScreen() {
             distance={item.distance}
             bio={item.profile.bio}
             rankScore={item.rankScore}
+            matchScore={item.matchScore}
             commonInterests={item.commonInterests}
             shortSnippet={item.shortSnippet}
             analysisReady={item.analysisReady}
@@ -309,6 +311,7 @@ export default function NearbyScreen() {
                   userId: item.profile.userId,
                   distance: String(item.distance),
                   rankScore: String(item.rankScore),
+                  matchScore: String(item.matchScore),
                   commonInterests: JSON.stringify(item.commonInterests),
                   displayName: item.profile.displayName,
                   avatarUrl: item.profile.avatarUrl ?? '',

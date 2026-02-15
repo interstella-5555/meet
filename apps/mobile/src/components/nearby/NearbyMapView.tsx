@@ -17,6 +17,7 @@ export interface MapUser {
   gridLng: number;
   gridId: string;
   rankScore: number;
+  matchScore: number;
   commonInterests: string[];
   shortSnippet: string | null;
   analysisReady: boolean;

@@ -60,6 +60,7 @@ export default function UserProfileScreen() {
     userId: string;
     distance: string;
     rankScore: string;
+    matchScore: string;
     commonInterests: string;
     displayName: string;
     avatarUrl: string;
@@ -68,6 +69,7 @@ export default function UserProfileScreen() {
   const userId = params.userId;
   const distance = Number(params.distance) || 0;
   const rankScore = Number(params.rankScore) || 0;
+  const matchScore = Number(params.matchScore) || 0;
   const commonInterests: string[] = params.commonInterests
     ? JSON.parse(params.commonInterests)
     : [];
@@ -88,7 +90,7 @@ export default function UserProfileScreen() {
 
   const matchPercent = analysis
     ? Math.round(analysis.aiMatchScore)
-    : Math.round(rankScore * 100);
+    : matchScore;
 
   const { data: sentWaves } = trpc.waves.getSent.useQuery();
   const { data: receivedWaves } = trpc.waves.getReceived.useQuery();

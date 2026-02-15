@@ -388,6 +388,7 @@ export const profilesRouter = router({
           gridLng: gridPos.gridLng,
           gridId: gridPos.gridId,
           rankScore: Math.round(rankScore * 100) / 100,
+          matchScore: Math.round(matchScore * 100),
           commonInterests,
           shortSnippet: analysis?.shortSnippet ?? null,
           analysisReady: !!analysis,

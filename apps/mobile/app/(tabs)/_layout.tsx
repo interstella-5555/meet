@@ -6,6 +6,7 @@ import { trpc } from '../../src/lib/trpc';
 import { useWebSocket, sendWsMessage } from '../../src/lib/ws';
 import { colors, type as typ, fonts, spacing } from '../../src/theme';
 import { IconPin, IconWave, IconChat, IconPerson, IconSettings } from '../../src/components/ui/icons';
+import { useInAppNotifications } from '../../src/hooks/useInAppNotifications';
 
 export default function TabsLayout() {
   const user = useAuthStore((state) => state.user);
@@ -40,6 +41,7 @@ export default function TabsLayout() {
     []
   );
   useWebSocket(wsHandler);
+  useInAppNotifications();
 
   const { data: profileData, isLoading: isLoadingProfile, isError, refetch } =
     trpc.profiles.me.useQuery(undefined, {

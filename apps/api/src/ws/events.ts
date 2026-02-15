@@ -44,6 +44,7 @@ export interface NewWaveEvent {
     status: string;
     createdAt: Date;
   };
+  fromProfile: { displayName: string; avatarUrl: string | null };
 }
 
 export interface WaveRespondedEvent {
@@ -51,6 +52,7 @@ export interface WaveRespondedEvent {
   waveId: string;
   accepted: boolean;
   conversationId: string | null;
+  responderProfile: { displayName: string; avatarUrl: string | null };
 }
 
 export interface AnalysisReadyEvent {

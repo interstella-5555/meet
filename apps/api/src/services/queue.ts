@@ -82,7 +82,7 @@ function getQueue(): Queue {
     _queue = new Queue('ai-jobs', {
       connection: getConnectionConfig(),
       defaultJobOptions: {
-        removeOnComplete: true,
+        removeOnComplete: { count: 500, age: 3600 },
         removeOnFail: { count: 100 },
         attempts: 3,
         backoff: { type: 'exponential', delay: 5000 },
@@ -104,6 +104,9 @@ function profileHash(bio: string, lookingFor: string): string {
 // --- Connection analysis processors (unchanged) ---
 
 async function processAnalyzePair(userAId: string, userBId: string) {
+  const t0 = performance.now();
+
+  // --- db-fetch phase ---
   const [profileA] = await db
     .select()
     .from(profiles)
@@ -113,7 +116,10 @@ async function processAnalyzePair(userAId: string, userBId: string) {
     .from(profiles)
     .where(eq(profiles.userId, userBId));
 
-  if (!profileA?.socialProfile || !profileB?.socialProfile) return;
+  if (!profileA?.socialProfile || !profileB?.socialProfile) {
+    console.log(`[queue] analyze-pair skip (no profile) | db-fetch: ${(performance.now() - t0).toFixed(0)}ms | pair: ${userAId.slice(0, 8)} → ${userBId.slice(0, 8)}`);
+    return;
+  }
 
   const hashA = profileHash(profileA.bio, profileA.lookingFor);
   const hashB = profileHash(profileB.bio, profileB.lookingFor);
@@ -128,14 +134,19 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       )
     );
 
+  const tFetch = performance.now();
+
   if (
     existingAB &&
     existingAB.fromProfileHash === hashA &&
     existingAB.toProfileHash === hashB
   ) {
+    console.log(`[queue] analyze-pair done | db-fetch: ${(tFetch - t0).toFixed(0)}ms | total: ${(tFetch - t0).toFixed(0)}ms | pair: ${userAId.slice(0, 8)} → ${userBId.slice(0, 8)} | skipped: true`);
     return;
   }
 
+  // --- ai-call phase ---
+  const tAi0 = performance.now();
   const result = await analyzeConnection(
     {
       socialProfile: profileA.socialProfile,
@@ -148,7 +159,10 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       lookingFor: profileB.lookingFor,
     }
   );
+  const tAi = performance.now();
 
+  // --- db-write phase ---
+  const tWrite0 = performance.now();
   const now = new Date();
 
   if (existingAB) {
@@ -224,6 +238,10 @@ async function processAnalyzePair(userAId: string, userBId: string) {
     aboutUserId: userAId,
     shortSnippet: result.snippetForB,
   });
+
+  const tWrite = performance.now();
+
+  console.log(`[queue] analyze-pair done | db-fetch: ${(tFetch - t0).toFixed(0)}ms | ai: ${(tAi - tAi0).toFixed(0)}ms | db-write: ${(tWrite - tWrite0).toFixed(0)}ms | total: ${(tWrite - t0).toFixed(0)}ms | pair: ${userAId.slice(0, 8)} → ${userBId.slice(0, 8)} | skipped: false`);
 }
 
 async function processAnalyzeUserPairs(
@@ -413,6 +431,8 @@ async function processGenerateProfileFromQA(job: GenerateProfileFromQAJob) {
 
 async function processJob(job: Job<AIJob>) {
   const data = job.data;
+  const queueWait = job.processedOn ? job.processedOn - job.timestamp : 0;
+  console.log(`[queue] processing ${data.type} | jobId: ${job.id} | wait: ${(queueWait / 1000).toFixed(1)}s`);
 
   switch (data.type) {
     case 'analyze-pair':

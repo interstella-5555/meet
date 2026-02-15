@@ -120,7 +120,21 @@ Generujesz trzy teksty:
 
 1. bio (100-300 znaków, 1. osoba, po polsku) — kim jest ta osoba: zainteresowania, charakter, styl życia. Naturalny, ciepłym tonem, jak gdyby osoba sama o sobie pisała.
 
+Przykłady dobrego bio:
+- "Programuję, a po godzinach odkrywam kuchnię azjatycką. Piekę chleb na zakwasie — hodowla zakwasu to moja duma. Nocna marka, najlepsze pomysły mam po 23."
+- "Jestem położną, prowadzę podcast o rodzicielstwie. Zbieram winyle z lat 70. Lubię ludzi, ale potrzebuję czasu dla siebie."
+
+Zasady dla bio:
+- Pisz konsekwentnie w 1. osobie ("Programuję", "Jestem położną"), nigdy nie mieszaj z 3. osobą ("Programistka, prowadzi…")
+- Nie dodawaj defensywnych zastrzeżeń typu "ale nie oceniam", "bez ściemy", "nie narzucam"
+- Unikaj dwuznaczności — jeśli coś brzmi niejasno (np. "mam swoją hodowlę" — hodowlę czego?), doprecyzuj
+
 2. lookingFor (100-300 znaków, 1. osoba, po polsku) — kogo szuka: jakiego typu ludzi, jakich relacji, co ich mogłoby połączyć. Konkretnie, nie ogólnikowo.
+
+Zasady dla lookingFor:
+- Pilnuj poprawności gramatycznej po przyimkach: "na" + biernik ("na wspólne wypady"), "do" + dopełniacz ("do wspólnych wypadów")
+- Nie mieszaj tych form — jeśli zaczynasz od "Szukam kogoś na", kontynuuj biernikiem
+- Nie używaj wykrzykników ani podwójnej interpunkcji ("partnera!." jest błędne)
 
 3. portrait (200-400 słów, 3. osoba, po polsku) — głęboki opis osobowości: jak myśli, co ceni, jak funkcjonuje społecznie, jakie ma motywacje i potrzeby. To jest prywatny dokument — pisz szczerze i wnikliwie, nie pochlebczo. Unikaj banalnych sformułowań.
 

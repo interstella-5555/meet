@@ -85,20 +85,19 @@ export default function ProfileScreen() {
 
       <View style={styles.privacySection}>
         <View style={styles.privacyRow}>
-          <View style={styles.privacyText}>
-            <Text style={styles.privacyLabel}>Ukryj moj profil</Text>
-            <Text style={styles.privacyDescription}>
-              Twoj profil nie bedzie widoczny na mapie ani w wynikach wyszukiwania
-            </Text>
-          </View>
+          <Text style={styles.privacyLabel}>Ukryj moj profil</Text>
           <Switch
             testID="privacy-toggle"
             value={isHidden}
             onValueChange={handleToggleHidden}
-            trackColor={{ false: colors.rule, true: colors.accent }}
-            thumbColor={colors.bg}
+            trackColor={{ false: '#C0BAA8', true: colors.accent }}
+            thumbColor="#FFFFFF"
+            ios_backgroundColor="#C0BAA8"
           />
         </View>
+        <Text style={styles.privacyDescription}>
+          Twoj profil nie bedzie widoczny na mapie ani w wynikach wyszukiwania
+        </Text>
       </View>
 
       <View style={styles.logoutContainer}>
@@ -174,13 +173,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  privacyText: {
-    flex: 1,
-    marginRight: spacing.column,
-  },
   privacyLabel: {
     ...typ.body,
     fontFamily: fonts.sansSemiBold,
+    flex: 1,
+    marginRight: spacing.column,
   },
   privacyDescription: {
     ...typ.caption,

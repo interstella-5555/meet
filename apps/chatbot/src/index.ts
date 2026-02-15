@@ -11,6 +11,7 @@ import {
 } from '../../api/src/db/schema';
 import { getToken, respondToWave, sendMessage } from './api-client';
 import { generateBotMessage } from './ai';
+import { initEvents, closeEvents, emit } from './events';
 
 // ── Config ───────────────────────────────────────────────────────────
 
@@ -34,12 +35,22 @@ if (!connectionString) {
 const client = postgres(connectionString);
 const db = drizzle(client);
 
+// ── Events (Redis pub/sub — optional) ───────────────────────────────
+
+if (process.env.REDIS_URL) {
+  initEvents(process.env.REDIS_URL);
+  console.log('[bot] Events: publishing to Redis');
+} else {
+  console.log('[bot] Events: REDIS_URL not set, events disabled');
+}
+
 // ── State ────────────────────────────────────────────────────────────
 
 let lastWaveCheck = new Date();
 let lastMessageCheck = new Date();
 const pendingWaves = new Set<string>(); // wave IDs with scheduled responses
 const pendingConversations = new Map<string, Timer>(); // conversationId → debounce timer
+
 // ── Helpers ──────────────────────────────────────────────────────────
 
 function randomDelay(min: number, max: number): number {
@@ -48,6 +59,15 @@ function randomDelay(min: number, max: number): number {
 
 function isSeedEmail(email: string): boolean {
   return email.endsWith('@example.com');
+}
+
+async function getDisplayName(userId: string): Promise<string> {
+  const [p] = await db
+    .select({ displayName: profiles.displayName })
+    .from(profiles)
+    .where(eq(profiles.userId, userId))
+    .limit(1);
+  return p?.displayName ?? userId.slice(0, 8);
 }
 
 /** Check if a seed user has recent human activity (non-bot messages) */
@@ -79,7 +99,6 @@ async function getMatchScore(
   fromUserId: string,
   toUserId: string,
 ): Promise<number | null> {
-  // We want the score as seen by toUserId (the bot) about fromUserId (the waver)
   const [analysis] = await db
     .select({ aiMatchScore: connectionAnalyses.aiMatchScore })
     .from(connectionAnalyses)
@@ -95,27 +114,30 @@ async function getMatchScore(
 }
 
 /** Decide whether to accept a wave based on match score */
-function shouldAcceptWave(matchScore: number | null): boolean {
+function shouldAcceptWave(matchScore: number | null): { accept: boolean; probability: number } {
   if (matchScore === null) {
-    // No analysis available — 50/50 fallback
-    return Math.random() < 0.5;
+    const roll = Math.random();
+    return { accept: roll < 0.5, probability: 0.5 };
   }
 
-  // matchScore is 0-100
-  // >= 75 → always accept
-  // Linear interpolation: 0 → 10% chance, 75 → 100% chance
-  if (matchScore >= 75) return true;
+  if (matchScore >= 75) return { accept: true, probability: 1 };
 
-  const acceptProbability = 0.1 + (matchScore / 75) * 0.9;
-  return Math.random() < acceptProbability;
+  const probability = 0.1 + (matchScore / 75) * 0.9;
+  const roll = Math.random();
+  return { accept: roll < probability, probability };
 }
 
 /** Decide if bot initiates conversation after accepting a wave */
-function shouldInitiateConversation(matchScore: number | null): boolean {
-  if (matchScore === null) return Math.random() < 0.3;
-  if (matchScore >= 75) return true;
-  // Linear: 0 → 5%, 75 → 100%
-  return Math.random() < 0.05 + (matchScore / 75) * 0.95;
+function shouldInitiateConversation(matchScore: number | null): { initiate: boolean; probability: number } {
+  if (matchScore === null) {
+    const roll = Math.random();
+    return { initiate: roll < 0.3, probability: 0.3 };
+  }
+  if (matchScore >= 75) return { initiate: true, probability: 1 };
+
+  const probability = 0.05 + (matchScore / 75) * 0.95;
+  const roll = Math.random();
+  return { initiate: roll < probability, probability };
 }
 
 async function getProfileByUserId(userId: string) {
@@ -134,6 +156,9 @@ async function handleWave(wave: {
   fromUserId: string;
   toUserId: string;
 }) {
+  const botName = await getDisplayName(wave.toUserId);
+  const fromName = await getDisplayName(wave.fromUserId);
+
   try {
     // Re-check wave still pending
     const [current] = await db
@@ -143,7 +168,7 @@ async function handleWave(wave: {
       .limit(1);
 
     if (!current || current.status !== 'pending') {
-      console.log(`[bot] Wave ${wave.id.slice(0, 8)} no longer pending, skipping`);
+      emit({ type: 'wave_expired', bot: botName, from: fromName, reason: 'no longer pending' });
       pendingWaves.delete(wave.id);
       return;
     }
@@ -160,16 +185,9 @@ async function handleWave(wave: {
       return;
     }
 
-    // Look up sender for logging
-    const [sender] = await db
-      .select({ email: user.email })
-      .from(user)
-      .where(eq(user.id, wave.fromUserId))
-      .limit(1);
-
     // Activity guard
     if (await isHumanControlled(wave.toUserId)) {
-      console.log(`[bot] ${seedUser.email} has human activity, skipping wave`);
+      emit({ type: 'wave_skip', bot: botName, from: fromName, reason: 'human controlling this user' });
       pendingWaves.delete(wave.id);
       return;
     }
@@ -178,22 +196,31 @@ async function handleWave(wave: {
 
     // Match-based acceptance
     const matchScore = await getMatchScore(wave.fromUserId, wave.toUserId);
-    const accept = shouldAcceptWave(matchScore);
+    const { accept, probability: acceptProb } = shouldAcceptWave(matchScore);
+    const scoreStr = matchScore !== null ? `${matchScore.toFixed(0)}%` : null;
 
-    const scoreStr = matchScore !== null ? `${matchScore.toFixed(0)}%` : 'unknown';
-    console.log(
-      `[bot] ${seedUser.email} ${accept ? 'accepted' : 'declined'} wave from ${sender?.email ?? wave.fromUserId.slice(0, 8)} (match: ${scoreStr})`,
-    );
+    emit({
+      type: accept ? 'wave_accept' : 'wave_decline',
+      bot: botName,
+      from: fromName,
+      matchScore: scoreStr,
+      probability: `${(acceptProb * 100).toFixed(0)}%`,
+    });
 
     const result = await respondToWave(token, wave.id, accept);
 
     if (accept && result.conversationId) {
-      if (shouldInitiateConversation(matchScore)) {
-        // Send opening message after extra delay
+      const { initiate, probability: initProb } = shouldInitiateConversation(matchScore);
+
+      if (initiate) {
         const openingDelay = randomDelay(OPENING_DELAY_MIN, OPENING_DELAY_MAX);
-        console.log(
-          `[bot] ${seedUser.email} initiating conversation (match: ${scoreStr}), opening in ${(openingDelay / 1000).toFixed(0)}s`,
-        );
+        emit({
+          type: 'opening_scheduled',
+          bot: botName,
+          from: fromName,
+          delay: `${(openingDelay / 1000).toFixed(0)}s`,
+          probability: `${(initProb * 100).toFixed(0)}%`,
+        });
 
         setTimeout(async () => {
           try {
@@ -210,21 +237,22 @@ async function handleWave(wave: {
             );
 
             await sendMessage(token, result.conversationId!, content);
-            console.log(
-              `[bot] ${seedUser.email} sent opening: "${content.slice(0, 50)}..."`,
-            );
-          } catch (err) {
-            console.error('[bot] Opening message error:', err);
+            emit({ type: 'opening_sent', bot: botName, from: fromName, message: content.slice(0, 80) });
+          } catch (err: any) {
+            emit({ type: 'opening_error', bot: botName, from: fromName, error: err.message?.slice(0, 100) });
           }
         }, openingDelay);
       } else {
-        console.log(
-          `[bot] ${seedUser.email} accepted wave, waiting for first message (match: ${scoreStr})`,
-        );
+        emit({
+          type: 'opening_skip',
+          bot: botName,
+          from: fromName,
+          reason: `probability ${(initProb * 100).toFixed(0)}% — waiting for first message`,
+        });
       }
     }
-  } catch (err) {
-    console.error(`[bot] handleWave error:`, err);
+  } catch (err: any) {
+    emit({ type: 'wave_error', bot: botName, from: fromName, error: err.message?.slice(0, 100) });
   } finally {
     pendingWaves.delete(wave.id);
   }
@@ -237,10 +265,12 @@ async function handleMessage(
   seedUserId: string,
   seedEmail: string,
 ) {
+  const botName = await getDisplayName(seedUserId);
+
   try {
     // Activity guard
     if (await isHumanControlled(seedUserId, conversationId)) {
-      console.log(`[bot] ${seedEmail} has human activity in conv, skipping`);
+      emit({ type: 'reply_skip', bot: botName, reason: 'human controlling this user' });
       return;
     }
 
@@ -274,7 +304,9 @@ async function handleMessage(
     const otherUserId = participants.find((p) => p.userId !== seedUserId)?.userId;
     if (!otherUserId || !botProfile) return;
 
-    // Seed-to-seed guard: don't reply if the other user is also a seed user without human activity
+    const otherName = await getDisplayName(otherUserId);
+
+    // Seed-to-seed guard
     const [otherUser] = await db
       .select({ email: user.email })
       .from(user)
@@ -284,7 +316,7 @@ async function handleMessage(
     if (otherUser && isSeedEmail(otherUser.email)) {
       const otherHasHuman = await isHumanControlled(otherUserId, conversationId);
       if (!otherHasHuman) {
-        console.log(`[bot] Seed-to-seed conv without human, skipping reply`);
+        emit({ type: 'reply_skip', bot: botName, from: otherName, reason: 'seed-to-seed without human' });
         return;
       }
     }
@@ -295,11 +327,9 @@ async function handleMessage(
     const content = await generateBotMessage(botProfile, otherProfile, history, false);
 
     await sendMessage(token, conversationId, content);
-    console.log(
-      `[bot] ${seedEmail} replied in ${conversationId.slice(0, 8)}: "${content.slice(0, 50)}..."`,
-    );
-  } catch (err) {
-    console.error(`[bot] handleMessage error:`, err);
+    emit({ type: 'reply_sent', bot: botName, from: otherName, message: content.slice(0, 80) });
+  } catch (err: any) {
+    emit({ type: 'reply_error', bot: botName, error: err.message?.slice(0, 100) });
   }
 }
 
@@ -307,7 +337,6 @@ async function handleMessage(
 
 async function pollWaves() {
   try {
-    // Find pending waves to seed users
     const pendingWavesList = await db
       .select({
         id: waves.id,
@@ -331,9 +360,10 @@ async function pollWaves() {
       pendingWaves.add(wave.id);
 
       const delay = randomDelay(WAVE_DELAY_MIN, WAVE_DELAY_MAX);
-      console.log(
-        `[bot] Scheduling wave response for ${wave.toUserId.slice(0, 8)} in ${(delay / 1000).toFixed(0)}s`,
-      );
+      const botName = await getDisplayName(wave.toUserId);
+      const fromName = await getDisplayName(wave.fromUserId);
+      emit({ type: 'wave_received', bot: botName, from: fromName, delay: `${(delay / 1000).toFixed(0)}s` });
+
       setTimeout(() => handleWave(wave), delay);
     }
   } catch (err) {
@@ -343,8 +373,6 @@ async function pollWaves() {
 
 async function pollMessages() {
   try {
-    // Find conversations where a seed user is a participant
-    // and there's a new message from someone else since last check
     const newMessages = await db
       .select({
         conversationId: messages.conversationId,
@@ -362,11 +390,9 @@ async function pollMessages() {
 
     lastMessageCheck = new Date();
 
-    // Group by conversation, find which ones have seed user participants
     const convIds = [...new Set(newMessages.map((m) => m.conversationId))];
     if (convIds.length === 0) return;
 
-    // For each conversation, check if a seed user is a participant and the message isn't from them
     for (const convId of convIds) {
       const participants = await db
         .select({
@@ -380,20 +406,19 @@ async function pollMessages() {
       const seedParticipant = participants.find((p) => isSeedEmail(p.email));
       if (!seedParticipant) continue;
 
-      // Check if the new messages are from the other person (not the seed user)
       const convMessages = newMessages.filter(
         (m) => m.conversationId === convId && m.senderId !== seedParticipant.userId,
       );
       if (convMessages.length === 0) continue;
 
-      // Debounce: cancel previous timer for this conversation
+      // Debounce
       const existingTimer = pendingConversations.get(convId);
       if (existingTimer) clearTimeout(existingTimer);
 
       const delay = randomDelay(MSG_DELAY_MIN, MSG_DELAY_MAX);
-      console.log(
-        `[bot] Scheduling reply for ${seedParticipant.email} in conv ${convId.slice(0, 8)} in ${(delay / 1000).toFixed(0)}s`,
-      );
+      const botName = await getDisplayName(seedParticipant.userId);
+      const senderName = await getDisplayName(convMessages[0].senderId);
+      emit({ type: 'message_received', bot: botName, from: senderName, delay: `${(delay / 1000).toFixed(0)}s` });
 
       const timer = setTimeout(() => {
         pendingConversations.delete(convId);
@@ -417,7 +442,6 @@ async function main() {
     `[bot] OpenAI: ${process.env.OPENAI_API_KEY ? 'configured' : 'NOT SET (using fallbacks)'}`,
   );
 
-  // Set initial timestamps to now so we only process new events
   lastWaveCheck = new Date();
   lastMessageCheck = new Date();
 
@@ -437,6 +461,7 @@ main().catch((err) => {
 process.on('SIGINT', () => {
   console.log('\n[bot] Shutting down...');
   for (const timer of pendingConversations.values()) clearTimeout(timer);
+  closeEvents();
   client.end();
   process.exit(0);
 });

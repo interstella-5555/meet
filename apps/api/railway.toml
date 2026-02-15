@@ -1,2 +1,0 @@
-[deploy]
-startCommand = "bun src/index.ts"

@@ -6,7 +6,7 @@ A mobile app for discovering and connecting with people who share your interests
   <img src="docs/screens-b6ace8.png" alt="Login, OTP verification, profile, and waves screens" width="800" />
 </p>
 
-**[Browse the Design Book →](https://design.meetapp.work)**
+**[Browse the Design Book →](https://design.blisko.app)**
 
 ## Stack
 

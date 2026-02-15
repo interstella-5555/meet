@@ -84,7 +84,7 @@ The API URL is controlled by `EXPO_PUBLIC_API_URL` in `apps/mobile/.env.local`.
 **For physical device (Railway API):**
 ```bash
 # Set .env.local to Railway
-echo 'EXPO_PUBLIC_API_URL=https://api.meetapp.work' > apps/mobile/.env.local
+echo 'EXPO_PUBLIC_API_URL=https://api.blisko.app' > apps/mobile/.env.local
 
 # Build and install on connected iPhone
 cd apps/mobile && npx expo run:ios --device

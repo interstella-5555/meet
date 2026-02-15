@@ -24,6 +24,7 @@ export interface BotEvent {
 }
 
 export function emit(event: BotEvent) {
+  console.log(`[bot] ${event.type}:`, JSON.stringify(event));
   if (!redis) return;
   const payload = { ...event, ts: Date.now() };
   redis.publish(CHANNEL, JSON.stringify(payload)).catch(() => {});

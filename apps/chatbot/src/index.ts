@@ -452,6 +452,7 @@ async function pollMessages() {
 
     const convIds = [...new Set(newMessages.map((m) => m.conversationId))];
     if (convIds.length === 0) return;
+    console.log(`[bot] pollMessages: ${newMessages.length} new messages in ${convIds.length} conversations`);
 
     for (const convId of convIds) {
       const participants = await db
@@ -464,7 +465,10 @@ async function pollMessages() {
         .where(eq(conversationParticipants.conversationId, convId));
 
       const seedParticipant = participants.find((p) => isSeedEmail(p.email));
-      if (!seedParticipant) continue;
+      if (!seedParticipant) {
+        console.log(`[bot] pollMessages: no seed participant in conv ${convId.slice(0, 8)}, emails: ${participants.map((p) => p.email).join(', ')}`);
+        continue;
+      }
 
       const convMessages = newMessages.filter(
         (m) => m.conversationId === convId && m.senderId !== seedParticipant.userId,
@@ -505,9 +509,14 @@ async function main() {
   lastWaveCheck = new Date();
   lastMessageCheck = new Date();
 
+  let pollCount = 0;
   setInterval(async () => {
     await pollWaves();
     await pollMessages();
+    pollCount++;
+    if (pollCount % 100 === 0) {
+      console.log(`[bot] heartbeat: ${pollCount} polls completed`);
+    }
   }, POLL_INTERVAL);
 
   console.log('[bot] Ready. Waiting for waves and messages...');

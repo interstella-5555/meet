@@ -1,13 +1,19 @@
 FROM oven/bun:1-alpine
 
+RUN npm i -g corepack@latest && corepack enable && corepack prepare pnpm@9 --activate
+
 WORKDIR /app
 
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY apps/chatbot/package.json ./apps/chatbot/package.json
-RUN cd apps/chatbot && bun install
+COPY apps/api/package.json ./apps/api/package.json
+COPY packages/shared/package.json ./packages/shared/package.json
+
+RUN pnpm install --frozen-lockfile --prefer-offline
 
 COPY apps/chatbot/ ./apps/chatbot/
 COPY apps/api/src/db/ ./apps/api/src/db/
 
 ENV NODE_ENV=production
 
-CMD ["bun", "apps/chatbot/src/index.ts"]
+CMD ["pnpm", "chatbot:start"]

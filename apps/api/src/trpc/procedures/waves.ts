@@ -12,6 +12,7 @@ import {
 import { sendWaveSchema, respondToWaveSchema, blockUserSchema } from '@repo/shared';
 import { TRPCError } from '@trpc/server';
 import { ee } from '../../ws/events';
+import { promotePairAnalysis } from '../../services/queue';
 
 export const wavesRouter = router({
   // Send a wave to someone
@@ -88,6 +89,8 @@ export const wavesRouter = router({
         .returning();
 
       // TODO: Send push notification
+
+      await promotePairAnalysis(ctx.userId, input.toUserId);
 
       ee.emit('newWave', { toUserId: input.toUserId, wave });
 

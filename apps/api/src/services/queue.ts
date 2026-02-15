@@ -538,6 +538,29 @@ export async function enqueuePairAnalysis(
   );
 }
 
+/** Promote a pair analysis to highest priority (for wave-triggered urgency) */
+export async function promotePairAnalysis(userAId: string, userBId: string) {
+  if (!process.env.REDIS_URL) return;
+
+  const [a, b] = [userAId, userBId].sort();
+  const jobId = `pair-${a}-${b}`;
+  const queue = getQueue();
+
+  const existing = await queue.getJob(jobId);
+  if (existing) {
+    const state = await existing.getState();
+    if (state === 'active' || state === 'completed') return; // already processing or done
+    await existing.remove();
+  }
+
+  // Add without priority → FIFO queue, processed before all prioritized jobs
+  await queue.add(
+    'analyze-pair',
+    { type: 'analyze-pair', userAId: a, userBId: b },
+    { jobId }
+  );
+}
+
 export async function enqueueProfileAI(
   userId: string,
   bio: string,

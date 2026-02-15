@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   Switch,
+  Pressable,
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuthStore } from '../../src/stores/authStore';
@@ -13,6 +14,7 @@ import { trpc } from '../../src/lib/trpc';
 import { colors, type as typ, spacing, fonts } from '../../src/theme';
 import { Avatar } from '../../src/components/ui/Avatar';
 import { Button } from '../../src/components/ui/Button';
+import { IconSparkles } from '../../src/components/ui/icons';
 
 export default function ProfileScreen() {
   const user = useAuthStore((state) => state.user);
@@ -68,14 +70,18 @@ export default function ProfileScreen() {
         </Text>
       </View>
 
-      <View style={styles.editContainer}>
-        <Button
-          testID="edit-profile-btn"
-          title="Edytuj profil"
-          variant="accent"
-          onPress={() => router.push('/(modals)/edit-profile')}
-        />
-      </View>
+      <Pressable
+        style={styles.reprofileLink}
+        onPress={() => router.push('/(modals)/profiling')}
+      >
+        <View style={styles.reprofileRow}>
+          <IconSparkles size={16} color={colors.muted} />
+          <Text style={styles.reprofileTitle}>Wyprobuj automatyczne profilowanie</Text>
+        </View>
+        <Text style={styles.reprofileDescription}>
+          Odpowiedz na kilka pytan — na ich podstawie wygenerujemy nowy opis, sekcje "kogo szukam" i portret osobowosci. Przed zapisaniem mozesz wszystko przejrzec i edytowac.
+        </Text>
+      </Pressable>
 
       <View style={styles.privacySection}>
         <View style={styles.privacyRow}>
@@ -137,11 +143,26 @@ const styles = StyleSheet.create({
   sectionContent: {
     ...typ.body,
   },
-  editContainer: {
+  reprofileLink: {
     paddingHorizontal: spacing.section,
     paddingVertical: spacing.column,
     borderBottomWidth: 1,
     borderBottomColor: colors.rule,
+  },
+  reprofileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.tight,
+  },
+  reprofileTitle: {
+    ...typ.caption,
+    color: colors.muted,
+    fontFamily: fonts.sansSemiBold,
+  },
+  reprofileDescription: {
+    ...typ.caption,
+    color: colors.muted,
+    marginTop: spacing.hairline,
   },
   privacySection: {
     padding: spacing.section,

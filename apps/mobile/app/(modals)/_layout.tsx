@@ -20,6 +20,14 @@ export default function ModalsLayout() {
         name="user/[userId]"
         options={{ title: 'Profil' }}
       />
+      <Stack.Screen
+        name="profiling"
+        options={{ title: 'Przeprofiluj sie' }}
+      />
+      <Stack.Screen
+        name="profiling-result"
+        options={{ title: 'Nowy profil' }}
+      />
     </Stack>
   );
 }

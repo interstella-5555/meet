@@ -10,6 +10,7 @@ import {
   updateLocationSchema,
   getNearbyUsersSchema,
   getNearbyUsersForMapSchema,
+  cosineSimilarity,
 } from '@repo/shared';
 import { toGridCenter, roundDistance } from '../../lib/grid';
 import {
@@ -17,6 +18,7 @@ import {
   enqueuePairAnalysis,
   enqueueProfileAI,
 } from '../../services/queue';
+import { moderateContent } from '../../services/moderation';
 import { ee } from '../../ws/events';
 
 export const profilesRouter = router({
@@ -43,6 +45,8 @@ export const profilesRouter = router({
         throw new TRPCError({ code: 'CONFLICT', message: 'Profile already exists' });
       }
 
+      await moderateContent([input.displayName, input.bio, input.lookingFor].join('\n\n'));
+
       const [profile] = await db
         .insert(profiles)
         .values({
@@ -66,6 +70,11 @@ export const profilesRouter = router({
   update: protectedProcedure
     .input(updateProfileSchema)
     .mutation(async ({ ctx, input }) => {
+      const fieldsToModerate = [input.displayName, input.bio, input.lookingFor].filter(Boolean);
+      if (fieldsToModerate.length > 0) {
+        await moderateContent(fieldsToModerate.join('\n\n'));
+      }
+
       const [profile] = await db
         .update(profiles)
         .set({
@@ -436,23 +445,29 @@ export const profilesRouter = router({
 
       return profile || null;
     }),
+
+  // Dev: clear all connection analyses
+  clearAnalyses: protectedProcedure.mutation(async () => {
+    await db.execute(sql`TRUNCATE connection_analyses`);
+    return { ok: true };
+  }),
+
+  // Dev: re-trigger connection analyses for current user
+  reanalyze: protectedProcedure.mutation(async ({ ctx }) => {
+    const [profile] = await db
+      .select()
+      .from(profiles)
+      .where(eq(profiles.userId, ctx.userId));
+
+    if (!profile?.latitude || !profile?.longitude) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Profile has no location set',
+      });
+    }
+
+    await enqueueUserPairAnalysis(ctx.userId, profile.latitude, profile.longitude);
+    return { ok: true };
+  }),
 });
 
-// Helper function for cosine similarity
-function cosineSimilarity(a: number[], b: number[]): number {
-  if (a.length !== b.length) return 0;
-
-  let dotProduct = 0;
-  let normA = 0;
-  let normB = 0;
-
-  for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-
-  if (normA === 0 || normB === 0) return 0;
-
-  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-}

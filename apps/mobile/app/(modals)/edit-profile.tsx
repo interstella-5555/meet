@@ -205,7 +205,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    padding: spacing.section,
+    paddingHorizontal: spacing.section,
+    paddingTop: spacing.section,
+    paddingBottom: 60,
   },
   avatarSection: {
     alignItems: 'center',
@@ -236,9 +238,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 0,
   },
-  multilineInput: {
-    minHeight: 120,
-  },
+  multilineInput: {},
   charCount: {
     ...typ.caption,
     textAlign: 'right',

@@ -1,6 +1,7 @@
 import { Queue, Worker, type Job } from 'bullmq';
 import { createHash } from 'crypto';
 import { eq, and, ne, sql } from 'drizzle-orm';
+import { cosineSimilarity } from '@repo/shared';
 import { db } from '../db';
 import { profiles, connectionAnalyses, blocks, profilingSessions, profilingQA } from '../db/schema';
 import {
@@ -83,6 +84,8 @@ function getQueue(): Queue {
       defaultJobOptions: {
         removeOnComplete: true,
         removeOnFail: { count: 100 },
+        attempts: 3,
+        backoff: { type: 'exponential', delay: 5000 },
       },
     });
   }
@@ -137,10 +140,12 @@ async function processAnalyzePair(userAId: string, userBId: string) {
     {
       socialProfile: profileA.socialProfile,
       displayName: profileA.displayName,
+      lookingFor: profileA.lookingFor,
     },
     {
       socialProfile: profileB.socialProfile,
       displayName: profileB.displayName,
+      lookingFor: profileB.lookingFor,
     }
   );
 
@@ -152,7 +157,7 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       .set({
         shortSnippet: result.snippetForA,
         longDescription: result.descriptionForA,
-        aiMatchScore: result.matchScore,
+        aiMatchScore: result.matchScoreForA,
         fromProfileHash: hashA,
         toProfileHash: hashB,
         updatedAt: now,
@@ -164,7 +169,7 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       toUserId: userBId,
       shortSnippet: result.snippetForA,
       longDescription: result.descriptionForA,
-      aiMatchScore: result.matchScore,
+      aiMatchScore: result.matchScoreForA,
       fromProfileHash: hashA,
       toProfileHash: hashB,
       createdAt: now,
@@ -194,7 +199,7 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       .set({
         shortSnippet: result.snippetForB,
         longDescription: result.descriptionForB,
-        aiMatchScore: result.matchScore,
+        aiMatchScore: result.matchScoreForB,
         fromProfileHash: hashB,
         toProfileHash: hashA,
         updatedAt: now,
@@ -206,7 +211,7 @@ async function processAnalyzePair(userAId: string, userBId: string) {
       toUserId: userAId,
       shortSnippet: result.snippetForB,
       longDescription: result.descriptionForB,
-      aiMatchScore: result.matchScore,
+      aiMatchScore: result.matchScoreForB,
       fromProfileHash: hashB,
       toProfileHash: hashA,
       createdAt: now,
@@ -329,17 +334,6 @@ async function processAnalyzeUserPairs(
   }
 }
 
-function cosineSimilarity(a: number[], b: number[]): number {
-  if (a.length !== b.length) return 0;
-  let dot = 0, normA = 0, normB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
-  }
-  if (normA === 0 || normB === 0) return 0;
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
-}
 
 // --- Profile AI processor (refactored from sync) ---
 

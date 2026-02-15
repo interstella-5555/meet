@@ -16,19 +16,22 @@ import { useAuthStore } from '../../src/stores/authStore';
 import { colors, type as typ, spacing, fonts } from '../../src/theme';
 import { Button } from '../../src/components/ui/Button';
 
-export default function ProfilingResultScreen() {
-  const { profilingSessionId, displayName, complete } = useOnboardingStore();
+export default function ProfilingResultModal() {
+  const { profilingSessionId } = useOnboardingStore();
+  const profile = useAuthStore((s) => s.profile);
   const setProfile = useAuthStore((s) => s.setProfile);
-  const setHasCheckedProfile = useAuthStore((s) => s.setHasCheckedProfile);
 
   const [bio, setBio] = useState('');
   const [lookingFor, setLookingFor] = useState('');
   const [portrait, setPortrait] = useState('');
-  const [portraitShared, setPortraitShared] = useState(false);
+  const [portraitShared, setPortraitShared] = useState(
+    profile?.portraitSharedForMatching ?? false
+  );
   const [portraitExpanded, setPortraitExpanded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  const utils = trpc.useUtils();
   const sessionState = trpc.profiling.getSessionState.useQuery(
     { sessionId: profilingSessionId! },
     { enabled: !!profilingSessionId }
@@ -36,7 +39,6 @@ export default function ProfilingResultScreen() {
 
   const applyProfile = trpc.profiling.applyProfile.useMutation();
 
-  // Load generated profile data
   useEffect(() => {
     if (sessionState.data?.session) {
       const s = sessionState.data.session;
@@ -47,24 +49,21 @@ export default function ProfilingResultScreen() {
   }, [sessionState.data]);
 
   const handleApply = async () => {
-    if (!profilingSessionId) return;
+    if (!profilingSessionId || !profile) return;
     setIsSubmitting(true);
     setError('');
 
     try {
-      const profile = await applyProfile.mutateAsync({
+      const updated = await applyProfile.mutateAsync({
         sessionId: profilingSessionId,
-        displayName,
+        displayName: profile.displayName,
         portraitSharedForMatching: portraitShared,
         bio: bio.trim() || undefined,
         lookingFor: lookingFor.trim() || undefined,
       });
-      setProfile(profile);
-      setHasCheckedProfile(true);
-      complete();
-      setTimeout(() => {
-        router.replace('/(tabs)');
-      }, 100);
+      setProfile(updated);
+      utils.profiles.me.invalidate();
+      router.dismiss();
     } catch (err) {
       console.error('Failed to apply profile:', err);
       setError('Nie udalo sie zapisac profilu. Sprobuj ponownie.');
@@ -87,7 +86,7 @@ export default function ProfilingResultScreen() {
       contentContainerStyle={styles.scrollContent}
       keyboardShouldPersistTaps="handled"
     >
-      <Text style={styles.title}>Twoj profil</Text>
+      <Text style={styles.title}>Nowy profil</Text>
       <Text style={styles.subtitle}>
         Mozesz edytowac tekst przed zapisaniem
       </Text>
@@ -147,7 +146,7 @@ export default function ProfilingResultScreen() {
 
       <View style={styles.buttonContainer}>
         <Button
-          title="Rozpocznij"
+          title="Zapisz"
           variant="accent"
           onPress={handleApply}
           disabled={isSubmitting || bio.trim().length < 10 || lookingFor.trim().length < 10}
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: spacing.section,
-    paddingTop: 80,
+    paddingTop: spacing.section,
     paddingBottom: spacing.block,
   },
   title: {

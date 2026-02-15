@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: spacing.section,
     paddingTop: 60,
+    paddingBottom: spacing.block,
   },
   step: {
     ...typ.caption,
@@ -137,7 +138,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: colors.ink,
     paddingVertical: 12,
-    minHeight: 150,
     marginBottom: spacing.tight,
   },
   charCount: {

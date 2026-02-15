@@ -222,6 +222,23 @@ program
     console.log(`  ✓ Sent  id=${msg.id}`);
   });
 
+program
+  .command("reanalyze")
+  .description("Clear analyses and re-trigger AI connection analysis")
+  .argument("<email>", "user email (e.g. user42@example.com)")
+  .option("--clear-all", "truncate all connection_analyses first")
+  .action(async (email: string, opts: { clearAll?: boolean }) => {
+    const { token } = await resolveUser(email);
+
+    if (opts.clearAll) {
+      await trpc("profiles.clearAnalyses", token, undefined);
+      console.log("  ✓ Cleared all connection analyses");
+    }
+
+    await trpc("profiles.reanalyze", token, undefined);
+    console.log("  ✓ Enqueued re-analysis for", email);
+  });
+
 // ── Main ──────────────────────────────────────────────────────────────
 
 program.parseAsync().catch((e) => {

@@ -25,8 +25,8 @@ export async function generateNextQuestion(
 ): Promise<NextQuestionResult> {
   if (!isConfigured()) {
     return {
-      question: 'Opowiedz mi o swoich zainteresowaniach?',
-      suggestions: ['Sport i aktywnosc', 'Muzyka i sztuka', 'Technologia', 'Podroze'],
+      question: 'Opowiedz mi o swoich zainteresowaniach.',
+      suggestions: ['Sport i aktywność', 'Muzyka i sztuka', 'Technologia', 'Podróże'],
       sufficient: qaHistory.length >= 5,
     };
   }
@@ -46,9 +46,9 @@ export async function generateNextQuestion(
 
   let extraInstructions = '';
   if (options?.userRequestedMore) {
-    extraInstructions += '\nUzytkownik poprosil o wiecej pytan — wygeneruj pytanie poglebione.';
+    extraInstructions += '\nUżytkownik poprosił o więcej pytań — wygeneruj pytanie pogłębione.';
     if (options?.directionHint) {
-      extraInstructions += ` Uzytkownik chcialby porozmawiac o: ${options.directionHint}`;
+      extraInstructions += `\n<user_hint>${options.directionHint}</user_hint>`;
     }
   }
 
@@ -56,21 +56,22 @@ export async function generateNextQuestion(
     model: openai('gpt-4o-mini'),
     schema: nextQuestionSchema,
     temperature: 0.8,
-    system: `Jestes adaptacyjnym profilerem osobowosci dla aplikacji spolecznosciowej. Tworzysz profil osobowosci ${displayName} na podstawie rozmowy.
+    maxOutputTokens: 300,
+    system: `Jesteś adaptacyjnym profilerem osobowości dla aplikacji społecznościowej. Tworzysz profil osobowości na podstawie rozmowy.
 
 Zasady:
-- Zadawaj pytania ktore poglebisz zrozumienie charakteru, osobowosci, zainteresowan i oczekiwan tej osoby
-- Uzywaj poprzednich odpowiedzi zeby isc glebiej — nie powtarzaj tematow
-- Roznicuj tematy: wartosci, styl spoleczny, zainteresowania, motywacje, marzenia, codziennosc
-- Preferuj scenariusze i pytania otwarte zamiast bezposrednich ("Opisz idealny dzien" > "Jaki jestes?")
-- Generuj 3-4 roznorodne sugerowane odpowiedzi (nie naprowadzajace, naturalne)
-- Po 5-7 dobrych odpowiedziach ustaw sufficient: true jezeli masz wystarczajaco materialu na bogaty profil
-- Pisz naturalnym, cieplym polskim jezykiem
-- Pytania powinny byc krotkie i konkretne (1-2 zdania)${extraInstructions}`,
-    prompt: `Imie: ${displayName}
-Liczba dotychczasowych pytan: ${qaHistory.length}${contextBlock}${historyBlock}
+- Zadawaj pytania które pogłębią zrozumienie charakteru, osobowości, zainteresowań i oczekiwań tej osoby
+- Używaj poprzednich odpowiedzi żeby iść głębiej — nie powtarzaj tematów
+- Różnicuj tematy: wartości, styl społeczny, zainteresowania, motywacje, marzenia, codzienność
+- Preferuj scenariusze i pytania otwarte zamiast bezpośrednich ("Opisz idealny dzień" > "Jaki jesteś?")
+- Generuj 3-4 różnorodne sugerowane odpowiedzi (nie naprowadzające, naturalne)
+- Po 5-7 dobrych odpowiedziach ustaw sufficient: true jeżeli masz wystarczająco materiału na bogaty profil
+- Pisz naturalnym, ciepłym polskim językiem
+- Pytania powinny być krótkie i konkretne (1-2 zdania)${extraInstructions}`,
+    prompt: `<user_name>${displayName}</user_name>
+Liczba dotychczasowych pytań: ${qaHistory.length}${contextBlock}${historyBlock}
 
-Wygeneruj nastepne pytanie.`,
+Wygeneruj następne pytanie.`,
   });
 
   return object;
@@ -91,9 +92,9 @@ export async function generateProfileFromQA(
 ): Promise<ProfileFromQAResult> {
   if (!isConfigured()) {
     return {
-      bio: 'Jestem osoba otwarta na nowe znajomosci.',
+      bio: 'Jestem osobą otwartą na nowe znajomości.',
       lookingFor: 'Szukam ludzi o podobnych zainteresowaniach.',
-      portrait: 'Osoba otwarta i ciekawa swiata.',
+      portrait: 'Osoba otwarta i ciekawa świata.',
     };
   }
 
@@ -112,18 +113,23 @@ export async function generateProfileFromQA(
     model: openai('gpt-4o-mini'),
     schema: profileFromQASchema,
     temperature: 0.7,
-    system: `Na podstawie rozmowy profilowej generujesz profil uzytkownika ${displayName} dla aplikacji spolecznosciowej.
+    maxOutputTokens: 1000,
+    system: `Na podstawie rozmowy profilowej generujesz profil użytkownika dla aplikacji społecznościowej.
 
 Generujesz trzy teksty:
 
-1. bio (100-300 znakow, 1. osoba, po polsku) — kim jest ta osoba: zainteresowania, charakter, styl zycia. Naturalny, cieplym tonem, jak gdyby osoba sama o sobie pisala.
+1. bio (100-300 znaków, 1. osoba, po polsku) — kim jest ta osoba: zainteresowania, charakter, styl życia. Naturalny, ciepłym tonem, jak gdyby osoba sama o sobie pisała.
 
-2. lookingFor (100-300 znakow, 1. osoba, po polsku) — kogo szuka: jakiego typu ludzi, jakich relacji, co ich mogloby polaczyc. Konkretnie, nie ogolnikowo.
+2. lookingFor (100-300 znaków, 1. osoba, po polsku) — kogo szuka: jakiego typu ludzi, jakich relacji, co ich mogłoby połączyć. Konkretnie, nie ogólnikowo.
 
-3. portrait (200-400 slow, 3. osoba, po polsku) — gleboki opis osobowosci: jak mysli, co ceni, jak funkcjonuje spolecznie, jakie ma motywacje i potrzeby. To jest prywatny dokument — pisz szczerze i wnikliwie, nie pochlebczo. Unikaj banalnych sformulowan.
+3. portrait (200-400 słów, 3. osoba, po polsku) — głęboki opis osobowości: jak myśli, co ceni, jak funkcjonuje społecznie, jakie ma motywacje i potrzeby. To jest prywatny dokument — pisz szczerze i wnikliwie, nie pochlebczo. Unikaj banalnych sformułowań.
 
-Bazuj WYLACZNIE na informacjach ktore wynikaja z odpowiedzi. Nie wymyslaj.`,
-    prompt: `Rozmowa profilowa z ${displayName}:\n${qaBlock}${contextBlock}`,
+Bazuj WYŁĄCZNIE na informacjach które wynikają z odpowiedzi. Nie wymyślaj.`,
+    prompt: `<user_name>${displayName}</user_name>
+
+<profiling_conversation>
+${qaBlock}${contextBlock}
+</profiling_conversation>`,
   });
 
   return object;

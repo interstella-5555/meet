@@ -1,11 +1,11 @@
 import { useEffect, useCallback, useRef } from 'react';
-import { Redirect, Tabs } from 'expo-router';
+import { Redirect, Tabs, router } from 'expo-router';
 import { useAuthStore } from '../../src/stores/authStore';
-import { View, ActivityIndicator, Text } from 'react-native';
+import { View, ActivityIndicator, Text, Pressable } from 'react-native';
 import { trpc } from '../../src/lib/trpc';
 import { useWebSocket, sendWsMessage } from '../../src/lib/ws';
-import { colors, type as typ, fonts } from '../../src/theme';
-import { IconPin, IconWave, IconChat, IconPerson } from '../../src/components/ui/icons';
+import { colors, type as typ, fonts, spacing } from '../../src/theme';
+import { IconPin, IconWave, IconChat, IconPerson, IconSettings } from '../../src/components/ui/icons';
 
 export default function TabsLayout() {
   const user = useAuthStore((state) => state.user);
@@ -184,6 +184,14 @@ export default function TabsLayout() {
           title: 'Profil',
           tabBarIcon: ({ color }) => <IconPerson size={20} color={color} />,
           tabBarAccessibilityLabel: 'tab-profile',
+          headerRight: () => (
+            <Pressable
+              onPress={() => router.push('/(modals)/edit-profile')}
+              style={{ marginRight: spacing.section }}
+            >
+              <IconSettings size={20} color={colors.muted} />
+            </Pressable>
+          ),
         }}
       />
     </Tabs>

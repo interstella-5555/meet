@@ -63,8 +63,19 @@ cd packages/dev-cli && bun run src/cli.ts
 | `chats <name>` | List conversations |
 | `messages <name> <convId>` | Show messages |
 | `send-message <name> <convId> <text>` | Send a message |
+| `reanalyze <email> [--clear-all]` | Clear analyses + re-trigger AI for user |
 
 Users are referenced by name (e.g. "ania"). The CLI resolves names to userId/token from an in-memory map. Set `API_URL` env var to override the default `http://localhost:3000`.
+
+## After changing AI prompts
+
+After modifying AI prompts in `apps/api/src/services/ai.ts`, clear stale analyses and re-trigger for a test user:
+
+```bash
+cd packages/dev-cli && bun run src/cli.ts reanalyze user42@example.com --clear-all
+```
+
+This truncates all `connection_analyses` and enqueues new pair analyses for the given user's nearby connections. Check results in the DB or mobile app.
 
 ## After restarting the app / seeding
 

@@ -15,6 +15,7 @@ import * as Location from 'expo-location';
 import { router } from 'expo-router';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useLocationStore } from '../../src/stores/locationStore';
+import { usePreferencesStore } from '../../src/stores/preferencesStore';
 import { trpc } from '../../src/lib/trpc';
 import {
   NearbyMapView,
@@ -35,6 +36,7 @@ export default function NearbyScreen() {
   const [selectedCluster, setSelectedCluster] = useState<GridCluster | null>(null);
   const { latitude, longitude, permissionStatus, setLocation, setPermissionStatus } =
     useLocationStore();
+  const { nearbyRadiusMeters, loadPreferences } = usePreferencesStore();
 
   const [mapExpanded, setMapExpanded] = useState(false);
   const mapHeight = useRef(new Animated.Value(0)).current;
@@ -65,7 +67,7 @@ export default function NearbyScreen() {
     {
       latitude: latitude!,
       longitude: longitude!,
-      radiusMeters: 5000,
+      radiusMeters: nearbyRadiusMeters,
       limit: 20,
     },
     {
@@ -84,7 +86,7 @@ export default function NearbyScreen() {
     {
       latitude: latitude!,
       longitude: longitude!,
-      radiusMeters: 5000,
+      radiusMeters: nearbyRadiusMeters,
       limit: 100,
     },
     {
@@ -133,6 +135,7 @@ export default function NearbyScreen() {
   }, [selectedCluster, allListUsers]);
 
   useEffect(() => {
+    loadPreferences();
     requestLocationPermission();
   }, []);
 

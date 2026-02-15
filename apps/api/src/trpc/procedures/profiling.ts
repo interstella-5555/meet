@@ -16,6 +16,7 @@ import {
   enqueueProfileFromQA,
   enqueueProfileAI,
 } from '../../services/queue';
+import { moderateContent } from '../../services/moderation';
 
 // --- Helpers ---
 
@@ -135,6 +136,8 @@ export const profilingRouter = router({
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'No unanswered question' });
       }
 
+      await moderateContent(input.answer);
+
       // Save answer
       await db
         .update(profilingQA)
@@ -220,6 +223,10 @@ export const profilingRouter = router({
 
       if (extraQuestions >= 5) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Maximum extra questions reached' });
+      }
+
+      if (input.directionHint) {
+        await moderateContent(input.directionHint);
       }
 
       const answeredQA = allQA
@@ -348,6 +355,8 @@ export const profilingRouter = router({
       // Allow user edits to override generated text
       const bio = input.bio ?? session.generatedBio;
       const lookingFor = input.lookingFor ?? session.generatedLookingFor;
+
+      await moderateContent([input.displayName, bio, lookingFor].join('\n\n'));
 
       // Check if profile exists — create or update
       const [existing] = await db

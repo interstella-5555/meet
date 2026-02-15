@@ -16,7 +16,6 @@ import { useWebSocket } from '../../src/lib/ws';
 import { useOnboardingStore } from '../../src/stores/onboardingStore';
 import { colors, type as typ, spacing, fonts } from '../../src/theme';
 import { Button } from '../../src/components/ui/Button';
-import { IconArrowLeft } from '../../src/components/ui/icons';
 import { ThinkingIndicator } from '../../src/components/ui/ThinkingIndicator';
 
 interface QAItem {
@@ -26,7 +25,7 @@ interface QAItem {
   sufficient: boolean;
 }
 
-export default function ProfilingScreen() {
+export default function ProfilingModal() {
   const { setProfilingSessionId } = useOnboardingStore();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [questions, setQuestions] = useState<QAItem[]>([]);
@@ -51,7 +50,6 @@ export default function ProfilingScreen() {
     { enabled: false }
   );
 
-  // Use ref for getSessionState to avoid recreating WS handler
   const getSessionStateRef = useRef(getSessionState);
   getSessionStateRef.current = getSessionState;
 
@@ -68,7 +66,6 @@ export default function ProfilingScreen() {
       setIsLoading(false);
       setIsSubmitting(false);
 
-      // Check if latest question has sufficient flag
       const latest = items[items.length - 1];
       if (latest && !latest.answer && latest.sufficient) {
         setShowSufficientUI(true);
@@ -76,7 +73,6 @@ export default function ProfilingScreen() {
         setShowSufficientUI(false);
       }
 
-      // Slide in animation
       slideAnim.setValue(300);
       Animated.spring(slideAnim, {
         toValue: 0,
@@ -86,7 +82,6 @@ export default function ProfilingScreen() {
     });
   }, [slideAnim]);
 
-  // Listen for WS events
   const handleWsMessage = useCallback(
     (msg: any) => {
       if (!sessionId) return;
@@ -96,7 +91,7 @@ export default function ProfilingScreen() {
       }
 
       if (msg.type === 'profilingComplete' && msg.sessionId === sessionId) {
-        router.replace('/onboarding/profiling-result');
+        router.replace('/(modals)/profiling-result');
       }
     },
     [sessionId, refreshSessionState]
@@ -104,7 +99,6 @@ export default function ProfilingScreen() {
 
   useWebSocket(handleWsMessage);
 
-  // Timeout fallback: if WS event is missed, poll after 15s
   useEffect(() => {
     if (!isSubmitting && !isLoading) return;
     if (!sessionId) return;
@@ -114,7 +108,6 @@ export default function ProfilingScreen() {
     return () => clearTimeout(timeout);
   }, [isSubmitting, isLoading, sessionId, refreshSessionState]);
 
-  // Start session on mount
   useEffect(() => {
     if (hasStarted.current) return;
     hasStarted.current = true;
@@ -150,11 +143,9 @@ export default function ProfilingScreen() {
       });
 
       if (result.done) {
-        // Hard cap reached — auto-complete
         await completeSession.mutateAsync({ sessionId });
         setIsLoading(true);
       }
-      // Otherwise wait for WS questionReady event
     } catch (err: any) {
       setCurrentAnswer(answer);
       setIsSubmitting(false);
@@ -203,7 +194,6 @@ export default function ProfilingScreen() {
 
     try {
       await completeSession.mutateAsync({ sessionId });
-      // Wait for WS profilingComplete
     } catch (err) {
       console.error('Failed to complete:', err);
       setIsLoading(false);
@@ -237,7 +227,7 @@ export default function ProfilingScreen() {
     );
   }
 
-  if (isLoading && questions.length === 0) {
+  if (questions.length === 0) {
     return (
       <View style={[styles.container, styles.centered]}>
         <ThinkingIndicator messages={['Przygotowuje Twoje pierwsze pytanie...']} />
@@ -252,12 +242,11 @@ export default function ProfilingScreen() {
     >
       <View style={styles.content}>
         <View style={styles.header}>
-          <Button variant="ghost" onPress={() => router.back()}>
-            <IconArrowLeft size={20} color={colors.accent} />
-          </Button>
-          <Text style={typ.caption}>
-            {answeredCount} / 12
-          </Text>
+          {answeredCount > 0 && (
+            <Text style={typ.caption}>
+              {answeredCount} {answeredCount === 1 ? 'odpowiedz' : answeredCount < 5 ? 'odpowiedzi' : 'odpowiedzi'}
+            </Text>
+          )}
         </View>
 
         {isSubmitting || isLoading ? (
@@ -399,11 +388,11 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: spacing.section,
-    paddingTop: 60,
+    paddingTop: spacing.section,
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     marginBottom: spacing.column,
   },

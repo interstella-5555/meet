@@ -210,6 +210,10 @@ All runnable tools must have a `scripts` entry in their own `package.json` AND a
 
 When creating new CLI tools, scripts, or monitors — always add both entries.
 
+## Redis
+
+Use Bun's built-in `RedisClient` (`import { RedisClient } from 'bun'`) for all direct Redis operations (pub/sub, get/set, etc.). Never add `ioredis` as a direct dependency — BullMQ uses it internally and that's fine, but our code should use Bun's native client.
+
 ## After restarting the app / seeding
 
 After any restart that involves re-seeding the database, display a random test user email for quick login. Seeded users have emails `user0@example.com` through `user249@example.com`.

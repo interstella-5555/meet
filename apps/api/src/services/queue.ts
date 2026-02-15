@@ -1,7 +1,7 @@
 import { Queue, Worker, type Job } from 'bullmq';
 import { createHash } from 'crypto';
 import { eq, and, ne, sql } from 'drizzle-orm';
-import Redis from 'ioredis';
+import { RedisClient } from 'bun';
 import { cosineSimilarity } from '@repo/shared';
 import { db } from '../db';
 import { profiles, connectionAnalyses, blocks, profilingSessions, profilingQA } from '../db/schema';
@@ -24,12 +24,12 @@ function getConnectionConfig() {
   };
 }
 
-let _redisPub: Redis | null = null;
+let _redisPub: RedisClient | null = null;
 
-function getRedisPub(): Redis | null {
+function getRedisPub(): RedisClient | null {
   if (!process.env.REDIS_URL) return null;
   if (!_redisPub) {
-    _redisPub = new Redis(process.env.REDIS_URL);
+    _redisPub = new RedisClient(process.env.REDIS_URL);
   }
   return _redisPub;
 }

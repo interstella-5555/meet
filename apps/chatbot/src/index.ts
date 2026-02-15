@@ -333,7 +333,6 @@ async function handleMessage(
 
     const { token } = await getToken(seedEmail);
 
-    // Fetch last 10 messages for context
     const recentMessages = await db
       .select({
         senderId: messages.senderId,
@@ -342,7 +341,7 @@ async function handleMessage(
       .from(messages)
       .where(eq(messages.conversationId, conversationId))
       .orderBy(desc(messages.createdAt))
-      .limit(10);
+      .limit(50);
 
     const history = recentMessages.reverse().map((m) => ({
       senderId: m.senderId === seedUserId ? 'bot' : 'other',

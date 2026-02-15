@@ -43,7 +43,7 @@ export async function generateBotMessage(
   const scenario = isOpening
     ? 'Pierwsza wiadomosc po zaakceptowaniu wave. Przywitaj sie nawiazujac do tego co was laczy.'
     : `Kontynuujesz rozmowe. Odpowiedz na ostatnia wiadomosc.\n\nOstatnie wiadomosci:\n${conversationHistory
-        .slice(-10)
+        .slice(-50)
         .map((m) => `${m.senderId === 'bot' ? botProfile.displayName : otherProfile.displayName}: ${m.content}`)
         .join('\n')}`;
 

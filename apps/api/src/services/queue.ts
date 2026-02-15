@@ -93,7 +93,7 @@ function getQueue(): Queue {
     _queue = new Queue('ai-jobs', {
       connection: getConnectionConfig(),
       defaultJobOptions: {
-        removeOnComplete: { count: 500, age: 3600 },
+        removeOnComplete: true,
         removeOnFail: { count: 100 },
         attempts: 3,
         backoff: { type: 'exponential', delay: 5000 },

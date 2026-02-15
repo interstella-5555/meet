@@ -414,6 +414,25 @@ export const profilesRouter = router({
       return { users: results, totalCount, nextCursor };
     }),
 
+  // Ensure analysis exists — lightweight "poke" to re-enqueue if stuck/failed
+  ensureAnalysis: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const [existing] = await db
+        .select({ id: connectionAnalyses.id })
+        .from(connectionAnalyses)
+        .where(
+          and(
+            eq(connectionAnalyses.fromUserId, ctx.userId),
+            eq(connectionAnalyses.toUserId, input.userId)
+          )
+        );
+      if (existing) return { status: 'ready' as const };
+
+      await enqueuePairAnalysis(ctx.userId, input.userId);
+      return { status: 'queued' as const };
+    }),
+
   // Get AI connection analysis for a specific user
   getConnectionAnalysis: protectedProcedure
     .input(z.object({ userId: z.string() }))

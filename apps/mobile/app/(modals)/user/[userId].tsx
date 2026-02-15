@@ -8,9 +8,9 @@ import {
   Alert,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { trpc } from '../../../src/lib/trpc';
-import { sendWsMessage } from '../../../src/lib/ws';
+import { sendWsMessage, useWebSocket } from '../../../src/lib/ws';
 import { colors, type as typ, spacing, fonts } from '../../../src/theme';
 import { Avatar } from '../../../src/components/ui/Avatar';
 import { IconWave, IconCheck, IconChat } from '../../../src/components/ui/icons';
@@ -83,10 +83,30 @@ export default function UserProfileScreen() {
     { enabled: !!userId }
   );
 
-  const { data: analysis } = trpc.profiles.getConnectionAnalysis.useQuery(
+  const { data: analysis, isFetched: analysisFetched } = trpc.profiles.getConnectionAnalysis.useQuery(
     { userId },
     { enabled: !!userId }
   );
+
+  const utils = trpc.useUtils();
+
+  // WS: invalidate analysis when backend signals it's ready
+  const wsHandler = useCallback((msg: any) => {
+    if (msg.type === 'analysisReady' && msg.aboutUserId === userId) {
+      utils.profiles.getConnectionAnalysis.invalidate({ userId });
+    }
+  }, [userId]);
+  useWebSocket(wsHandler);
+
+  // Self-healing: if analysis confirmed missing after 10s, poke backend
+  const ensureAnalysisMutation = trpc.profiles.ensureAnalysis.useMutation();
+  useEffect(() => {
+    if (!analysisFetched || analysis) return;
+    const timer = setTimeout(() => {
+      ensureAnalysisMutation.mutate({ userId });
+    }, 10_000);
+    return () => clearTimeout(timer);
+  }, [analysisFetched, analysis, userId]);
 
   const matchPercent = analysis
     ? Math.round(analysis.aiMatchScore)
@@ -95,7 +115,6 @@ export default function UserProfileScreen() {
   const { data: sentWaves } = trpc.waves.getSent.useQuery();
   const { data: receivedWaves } = trpc.waves.getReceived.useQuery();
   const { data: allConversations } = trpc.messages.getConversations.useQuery();
-  const utils = trpc.useUtils();
   const sendWaveMutation = trpc.waves.send.useMutation();
   const cancelWaveMutation = trpc.waves.cancel.useMutation();
   const respondMutation = trpc.waves.respond.useMutation();
@@ -300,6 +319,11 @@ export default function UserProfileScreen() {
               </View>
             ))}
           </View>
+        </View>
+      ) : !analysis ? (
+        <View style={styles.snippetBlock}>
+          <Text style={styles.snippetLabel}>WSPÓLNE</Text>
+          <SkeletonLines count={3} />
         </View>
       ) : null}
 

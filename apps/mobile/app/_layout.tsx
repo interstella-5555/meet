@@ -9,6 +9,7 @@ import { useAuthStore } from '../src/stores/authStore';
 import { authClient } from '../src/lib/auth';
 import { useWebSocket } from '../src/lib/ws';
 import { NotificationProvider } from '../src/providers/NotificationProvider';
+import { NotificationOverlay } from '../src/components/ui/NotificationOverlay';
 import { colors } from '../src/theme';
 
 const queryClient = new QueryClient();
@@ -75,6 +76,7 @@ export default function RootLayout() {
             <Stack.Screen name="onboarding" />
             <Stack.Screen name="(modals)" options={{ presentation: 'modal' }} />
           </Stack>
+          <NotificationOverlay />
         </NotificationProvider>
       </QueryClientProvider>
     </trpc.Provider>

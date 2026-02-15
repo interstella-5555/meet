@@ -52,6 +52,7 @@ export default function NearbyScreen() {
   useWebSocket(wsHandler);
 
   const updateLocationMutation = trpc.profiles.updateLocation.useMutation();
+  const ensureAnalysisMutation = trpc.profiles.ensureAnalysis.useMutation();
 
   const [isManualRefresh, setIsManualRefresh] = useState(false);
 
@@ -125,6 +126,24 @@ export default function NearbyScreen() {
     if (!listData?.pages) return [];
     return listData.pages.flatMap((page) => page.users);
   }, [listData]);
+
+  // Self-healing: if analyses are stuck, poke backend after 30s
+  const allListUsersRef = useRef(allListUsers);
+  allListUsersRef.current = allListUsers;
+
+  useEffect(() => {
+    const unanalyzed = allListUsers.filter((u) => !u.analysisReady);
+    if (unanalyzed.length === 0) return;
+
+    const timer = setTimeout(() => {
+      const stillUnanalyzed = allListUsersRef.current.filter((u) => !u.analysisReady);
+      for (const u of stillUnanalyzed.slice(0, 5)) {
+        ensureAnalysisMutation.mutate({ userId: u.profile.userId });
+      }
+    }, 30_000);
+
+    return () => clearTimeout(timer);
+  }, [allListUsers]);
 
   // Users to display in list: filtered by cluster or all
   const displayUsers = useMemo(() => {

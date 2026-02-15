@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useRef, useState } from 'react';
 import * as Haptics from 'expo-haptics';
-import { NotificationBanner } from '../components/ui/NotificationBanner';
 
 export interface NotificationConfig {
   id: string;
@@ -13,10 +12,16 @@ export interface NotificationConfig {
 
 interface NotificationContextValue {
   showNotification: (config: NotificationConfig) => void;
+  current: NotificationConfig | null;
+  handlePress: () => void;
+  handleDismiss: () => void;
 }
 
 const NotificationContext = createContext<NotificationContextValue>({
   showNotification: () => {},
+  current: null,
+  handlePress: () => {},
+  handleDismiss: () => {},
 });
 
 export function useNotification() {
@@ -68,19 +73,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   }, [current, handleDismiss]);
 
   return (
-    <NotificationContext.Provider value={{ showNotification }}>
+    <NotificationContext.Provider value={{ showNotification, current, handlePress, handleDismiss }}>
       {children}
-      {current && (
-        <NotificationBanner
-          visible
-          title={current.title}
-          subtitle={current.subtitle}
-          avatarUrl={current.avatarUrl}
-          avatarName={current.avatarName}
-          onPress={handlePress}
-          onDismiss={handleDismiss}
-        />
-      )}
     </NotificationContext.Provider>
   );
 }

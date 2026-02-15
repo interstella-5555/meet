@@ -375,10 +375,10 @@ async function processAnalyzeUserPairs(
     const [a, b] = [userId, other.userId].sort();
     const nameA = a === userId ? myName : other.displayName;
     const nameB = b === userId ? myName : other.displayName;
-    await queue.add(
-      'analyze-pair',
+    await safeEnqueuePairJob(
+      queue,
       { type: 'analyze-pair', userAId: a, userBId: b, nameA, nameB, requestedBy: myName },
-      { jobId: `pair-${a}-${b}`, priority: i + 1 }
+      { priority: i + 1 }
     );
   }
 }
@@ -516,6 +516,25 @@ export function startWorker() {
   console.log('[queue] AI jobs worker started');
 }
 
+// --- Helpers for safe job enqueue ---
+
+async function safeEnqueuePairJob(
+  queue: Queue,
+  data: { type: 'analyze-pair'; userAId: string; userBId: string; nameA?: string; nameB?: string; requestedBy?: string },
+  opts?: { priority?: number }
+) {
+  const jobId = `pair-${data.userAId}-${data.userBId}`;
+  const existing = await queue.getJob(jobId);
+  if (existing) {
+    const state = await existing.getState();
+    if (state === 'active' || state === 'completed') return;
+    if ((state === 'waiting' || state === 'delayed') && !opts?.priority) return;
+    // Remove failed/stale job before re-adding (try-catch for TOCTOU race)
+    try { await existing.remove(); } catch { return; }
+  }
+  await queue.add('analyze-pair', data, { jobId, ...opts });
+}
+
 // --- Enqueue functions ---
 
 export async function enqueueUserPairAnalysis(
@@ -552,11 +571,9 @@ export async function enqueuePairAnalysis(
   const nameA = a === userAId ? opts?.nameA : opts?.nameB;
   const nameB = b === userAId ? opts?.nameA : opts?.nameB;
   const queue = getQueue();
-  await queue.add(
-    'analyze-pair',
-    { type: 'analyze-pair', userAId: a, userBId: b, nameA, nameB, requestedBy: opts?.requestedBy },
-    { jobId: `pair-${a}-${b}` }
-  );
+  await safeEnqueuePairJob(queue, {
+    type: 'analyze-pair', userAId: a, userBId: b, nameA, nameB, requestedBy: opts?.requestedBy,
+  });
 }
 
 /** Promote a pair analysis to highest priority (for wave-triggered urgency) */
